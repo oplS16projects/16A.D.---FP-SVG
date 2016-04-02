@@ -4,8 +4,10 @@
 The goal of this project is to implement XML-based Scalable Vector Graphics specification on a limited basis and to provide means to edit svg documents graphically.
 
 ### Analysis
-The project will make use of several approaches. In order to
-Higher Order
+The project will make use of several approaches.
+To be continued.....
+
+-
 Explain what approaches from class you will bring to bear on the project. Be explicit: e.g., will you use recursion? How? Will you use map/filter/reduce? How? Will you use data abstraction? Will you use object-orientation? Will you use functional approaches to processing your data? Will you use state-modification approaches? A combination?
 
 The idea here is to identify what ideas from the class you will use in carrying out your project. 
