@@ -4,13 +4,12 @@
 The goal of this project is to implement XML-based Scalable Vector Graphics specification on a limited basis and to provide means to edit svg documents graphically.
 
 ### Analysis
-The project will make use of several approaches.
-To be continued.....
+The project will make use of several concepts.
 
--
-Explain what approaches from class you will bring to bear on the project. Be explicit: e.g., will you use recursion? How? Will you use map/filter/reduce? How? Will you use data abstraction? Will you use object-orientation? Will you use functional approaches to processing your data? Will you use state-modification approaches? A combination?
-
-The idea here is to identify what ideas from the class you will use in carrying out your project. 
+* **Recursion**
+  * Recursive HOPs, such as map and filter, will be used to retrieve data from the lists populated with "elements" displayed on the     screen.
+* **State modification and object-orientation**
+  * Objects will be used to store individual "element" data and properties. Each object's state will be modified to adjust/update properties.
 
 ### Data set or other source materials
 If you will be working with existing data, where will you get those data from? (Dowload it from a website? access it in a database? create it in a simulation you will build....)
@@ -22,7 +21,7 @@ Do your homework here: if you are pulling data from somewhere, actually go downl
 If you are using some other starting materails, explain what they are. Basically: anything you plan to use that isn't code.
 
 ### Deliverable and Demonstration
-Explain exactly what you'll have at the end. What will it be able to do at the live demo?
+The
 
 What exactly will you produce at the end of the project? A piece of software, yes, but what will it do? Here are some questions to think about (and answer depending on your application).
 
