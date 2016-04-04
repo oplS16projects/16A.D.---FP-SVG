@@ -9,7 +9,7 @@ The project will make use of several concepts.
 * **Recursion**
   * Recursive HOPs, such as map and filter, will be used to retrieve data from the lists populated with "elements" displayed on the     screen.
 * **State modification and object-orientation**
-  * Objects will be used to store individual "elements" data and properties. Each object's state will be modified to adjust/update properties.
+  * Objects will be used to store individual "elements" data and properties. Each object's state will be modified to adjust/update element's properties.
 
 ### Data set or other source materials
 If you will be working with existing data, where will you get those data from? (Dowload it from a website? access it in a database? create it in a simulation you will build....)
