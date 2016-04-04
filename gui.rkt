@@ -12,6 +12,9 @@
 ;
 ; Naming convention for GUI elements:
 ;              m-wnd-"type"-"context"
+; m - window function, e.g. main, toolset, etc.
+; "type" - type of object placed in the window
+; "context" - e.g. dc or some other derived type
 
 
 
