@@ -34,8 +34,8 @@
 
 
 ;; Tool pane
-(provide m-wnd-tool-pane)
-(define m-wnd-tool-pane (new vertical-pane%
+(provide m-wnd-tool_pane)
+(define m-wnd-tool_pane (new vertical-pane%
                              [parent m-wnd-pane]
                              [min-width 50]	 
                              [min-height 600]	 
@@ -43,82 +43,82 @@
                              [stretchable-height #f]))
 
 ;;Tool pane buttons
-(new message% [parent m-wnd-tool-pane]
+(new message% [parent m-wnd-tool_pane]
      [label "Toolbar"])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-tool-pane]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
@@ -129,23 +129,23 @@
 ;;     [label "Information Panel\n"])
 
 ; Button pane
-(provide button-pane)
-(define button-pane (new horizontal-pane% [parent m-wnd]
+(provide m-wnd-button_pane)
+(define m-wnd-button_pane (new horizontal-pane% [parent m-wnd]
                          [alignment (list 'center 'center)]))
 
-(new button% [parent button-pane]
+(new button% [parent m-wnd-button_pane]
      [label "?"]
      [callback button-call0])
-(new button% [parent button-pane]
+(new button% [parent m-wnd-button_pane]
      [label "Clear"]
      [callback button-call0])
-(new button% [parent button-pane]
+(new button% [parent m-wnd-button_pane]
      [label "Save"]
      [callback button-call0])
-(new button% [parent button-pane]
+(new button% [parent m-wnd-button_pane]
      [label "Test Color"]
      [callback button-call0])
-(new button% [parent button-pane]
+(new button% [parent m-wnd-button_pane]
      [label "?"]
      [callback button-call0])
 
