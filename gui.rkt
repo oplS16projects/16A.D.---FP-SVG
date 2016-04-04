@@ -1,3 +1,6 @@
+;Dmitri Kheifets
+;Adam Contardo
+
 #lang racket
 (require racket/gui/base)
 (require racket/draw)
