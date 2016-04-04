@@ -11,11 +11,10 @@
 ;;;;; GUI
 ;
 ; Naming convention for GUI elements:
-;
-;        m-wnd-"type"_"function"-"context"
-;        m - window order, e.g. main, toolset, etc.
-;        "type"_"function" - type of object placed in the window and it's function
-;        "context" - e.g. dc or some other derived type
+;              m-wnd-"type"-"context"
+; m - window function, e.g. main, toolset, etc.
+; "type" - type of object placed in the window
+; "context" - e.g. dc or some other derived type
 
 
 
@@ -35,8 +34,8 @@
 
 
 ;; Tool pane
-(provide m-wnd-pane_tool)
-(define m-wnd-pane_tool (new vertical-pane%
+(provide m-wnd-tool_pane)
+(define m-wnd-tool_pane (new vertical-pane%
                              [parent m-wnd-pane]
                              [min-width 50]	 
                              [min-height 600]	 
@@ -44,82 +43,82 @@
                              [stretchable-height #f]))
 
 ;;Tool pane buttons
-(new message% [parent m-wnd-pane_tool]
+(new message% [parent m-wnd-tool_pane]
      [label "Toolbar"])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
-(new button% [parent m-wnd-pane_tool]
+(new button% [parent m-wnd-tool_pane]
      [label "--?--"]
      [min-width 50]
      [min-height 40]
