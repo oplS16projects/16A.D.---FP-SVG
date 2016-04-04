@@ -11,15 +11,6 @@ The project will make use of several concepts.
 * **State modification and object-orientation**
   * Objects will be used to store individual "elements" data and properties. Each object's state will be modified to adjust/update element's properties.
 
-### Data set or other source materials
-If you will be working with existing data, where will you get those data from? (Dowload it from a website? access it in a database? create it in a simulation you will build....)
-
-How will you convert that data into a form usable for your project?  
-
-Do your homework here: if you are pulling data from somewhere, actually go download it and look at it. Explain in some detail what your plan is for accomplishing the necessary processing.
-
-If you are using some other starting materails, explain what they are. Basically: anything you plan to use that isn't code.
-
 ### Deliverable and Demonstration
 The deliverable will be a GUI application with minimalistic toolset and a canvas, where primitive objects, such as lines, squares and circles will be placed. The application will allow to store canvas drawing in form of SVG document, and be able to render SVG documents
 created with it (due to limited nature of implementation, most SVG documents created with other editors will be only partially compatible or incompatible at all). There will be an option available to modify each element on the screen individually via properties dialog.
