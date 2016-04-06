@@ -54,11 +54,8 @@ Here each group member gets a section where they, as an individual, detail what 
 
 In the headings below, replace the silly names and GitHub handles with your actual ones.
 
-### Susan Scheme @susanscheme
+### Dmitri Kheifets @tetra-d
 will write the....
 
-### Leonard Lambda @lennylambda
+### Ian Roberts @ia-n
 will work on...
-
-### Frank Functions @frankiefunk 
-Frank is team lead. Additionally, Frank will work on...   
