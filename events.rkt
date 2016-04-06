@@ -1,6 +1,3 @@
-;Dmitri Kheifets
-;Adam Contardo
-
 #lang racket
 (provide tool-call0)
 (provide button-call0)
