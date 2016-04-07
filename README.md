@@ -46,7 +46,6 @@ If an application will be able to store and render the same SVG document without
 will write the....
 
 ### Ian Roberts @ia-n
-will work on...
-
+Ian Roberts will be working adding the shape components as well as implementing the event handling using respective libraries.
 <!-- Links -->
 [archdiagram]: ./archchart.png
