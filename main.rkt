@@ -70,3 +70,13 @@
 
 (define canv-bitmap (make-object bitmap% 1 1))
 (define canv-bitmap-dc (new bitmap-dc% [bitmap canv-bitmap]))
+
+;Set bitmap width-height to canvas size
+(set! canv-bitmap (make-object bitmap%
+                    (send m-wnd-canv get-width)
+                    (send m-wnd-canv get-height)))
+(send canv-bitmap-dc set-bitmap canv-bitmap)
+
+;;define demo color and set pen for canvas-dc
+(define black (make-object color% 10 10 10))
+(send canv-bitmap-dc set-pen black 5 'solid)
