@@ -46,6 +46,6 @@ If an application will be able to store and render the same SVG document without
 Will be working on implementation of SVG document structure and it's elements, import/export of SVG document and event handling.
 
 ### Ian Roberts @ia-n
-Ian Roberts will be working adding the shape components as well as implementing the event handling using respective libraries.
+Ian Roberts will be working on adding the shape components as well as implementing the event handling using respective libraries.
 <!-- Links -->
 [archdiagram]: ./archchart.png
