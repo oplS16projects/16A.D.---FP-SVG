@@ -24,16 +24,23 @@ If an application will be able to store and render the same SVG document without
 ## Schedule
 
 ### First Milestone (Fri Apr 15)
-What exactly will be turned in on this day? 
+* Semi-complete GUI frontend.
+* Ability to draw at least one shape
+  and disaplay properties of drawn objects.
+* Export image to SVG.
 
 ### Second Milestone (Fri Apr 22)
-What exactly will be turned in on this day? 
+* Complete GUI frontend
+* Import from SVG.
+* Ability to modify properties of individual
+  shapes placed on canvas.
+* More shapes added.
 
 ### Final Presentation (last week of semester)
-What additionally will be done in the last chunk of time?
+Refining the code/documentation,
+Expanding on / adding functionality - if time permits.
 
 ## Group Responsibilities
-Here each group member gets a section where they, as an individual, detail what they are responsible for in this project. Each group member writes their own Responsibility section. Include the milestones and final deliverable.
 
 ### Dmitri Kheifets @tetra-d
 will write the....
