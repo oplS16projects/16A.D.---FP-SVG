@@ -88,8 +88,8 @@
 (send canv-bitmap-dc draw-line
                    x-start
                   y-start
-                   y2-coorid
-                   x2-coorid))
+                   x2-coorid
+                   y2-coorid))
 
   (define rectangle 
 
