@@ -201,11 +201,3 @@
   
 (define (draw-all-elements o-list)
     (map (λ(x)(draw-element x)) o-list))
-  
-
-
-;;define demo color and set pen for canvas-dc
-
-
-;(define black (make-object color% 10 10 10))
-;(send canv-bitmap-dc set-pen black 5 'solid)
