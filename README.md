@@ -28,10 +28,13 @@ If an application will be able to store and render the same SVG document without
  Goals for the first milstone are met only partially. Most of the work done is related to application's architecture.
  
 ### First Milestone (Fri Apr 15)
-* Semi-complete GUI frontend. **##done** 
+* Semi-complete GUI frontend.
+ * **##done** 
 * Ability to draw at least one shape 
-  and disaplay properties of drawn objects. **##partial - drawn shapes' properties aren't viewable yet**
-* Export image to SVG. **##not implemented yet**
+  and disaplay properties of drawn objects. 
+ * **##partial - drawn shapes' properties aren't viewable yet**
+* Export image to SVG. 
+ * **##not implemented yet**
 
 ### Second Milestone (Fri Apr 22)
 * Complete GUI frontend
