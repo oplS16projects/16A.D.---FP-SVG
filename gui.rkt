@@ -6,7 +6,6 @@
 
 
 ;; Main window constructor
-;(provide m-wnd)
 (provide mk-gui)
 (define (mk-gui)
 
