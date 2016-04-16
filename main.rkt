@@ -51,8 +51,7 @@
              ;)
            )
 |#
-    ;  (define rect (λ ()
-        ;  (define rect (λ ()
+
                          ((send event dragging?)
 
 ;(define (shape-to-draw var-if-needed)
@@ -65,8 +64,24 @@
 (define x-run     ((λ () (abs (- x2-coorid x1-coorid)))))
 (define x-start   ((λ () (min x1-coorid x2-coorid))))
 (define y-start   ((λ () (min y1-coorid y2-coorid))))
-                             
-(define make-perfect-shape ((λ ()  (max x-run y-run))))
+
+
+
+(define (make-perfect ) 
+
+(define (dispatch m )
+  (define same-run ((λ () (begin (set! x-run (max x-run y-run)) x-run))))
+(define startx ((λ () ( if (> x1-coorid x2-coorid) (begin (set! x-start (- x1-coorid same-run )) x-start) x-start))))
+(define starty ((λ () ( if (> y1-coorid y2-coorid) (begin (set! y-start (- y1-coorid same-run )) y-start) y-start))))
+
+  ( cond ((equal? m 'x ) startx)
+         ((equal? m 'y ) starty)
+        ((equal? m 'run ) same-run)
+         (else (error "something bad happend" ))))
+        dispatch )
+
+
+
   
 
                           (define line
@@ -88,12 +103,12 @@
 
          
   (send canv-bitmap-dc draw-rectangle
-                    x-start
-                   y-start
+                    ((make-perfect) 'x)
+                    ((make-perfect) 'y)
 
-
-                   make-perfect-shape
-                    make-perfect-shape))
+                    ((make-perfect) 'run)
+                  ((make-perfect) 'run)
+                    ))
   
 
   (define ellipse
@@ -110,10 +125,10 @@
 
          
   (send canv-bitmap-dc draw-ellipse
-                 x-start
-                 y-start
-                   make-perfect-shape
-                    make-perfect-shape
+                 ((make-perfect) 'x)
+                ((make-perfect) 'y)
+                   ((make-perfect) 'run)
+                    ((make-perfect) 'run)
                     ))
 
 
@@ -122,10 +137,10 @@
 
 (define (dispatch m )
 
-  ( cond ((equal? m 'rectangle ) rectangle)
-         ((equal? m 'ellipse ) ellipse)
-        ((equal? m 'circle ) circle)
-        ((equal? m 'line ) line)
+  ( cond ((equal? m 'rectangle ) 1)
+         ((equal? m 'ellipse ) 2)
+        ((equal? m 'circle ) 3)
+        ((equal? m 'line ) 1)
         ((equal? m 'square ) square)
          (else (error "something bad happend" ))))
 
