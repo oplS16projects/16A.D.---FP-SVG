@@ -7,9 +7,10 @@ The goal of this project is to implement XML-based Scalable Vector Graphics spec
 The project will make use of several concepts.
 
 * **Recursion**
-  * Recursive HOPs, such as map and filter, will be used to retrieve data from the lists populated with "elements" displayed on the     screen.
-* **State modification and object-orientation**
-  * Objects will be used to store individual "elements" data and properties. Each object's state will be modified to adjust/update element's properties.
+  * Recursive HOPs, such as map and filter, will be used to retrieve data from the lists populated with "element" objects.
+ 
+* **Object-orientation**
+  * Objects will be used to store individual "elements" parameters.
 
 ### Deliverable and Demonstration
 The deliverable will be a GUI application with minimalistic toolset and a canvas, where primitive objects, such as lines, squares and circles will be placed. The application will allow to store canvas drawing in form of SVG document, and be able to render SVG documents
@@ -24,10 +25,10 @@ If an application will be able to store and render the same SVG document without
 ## Schedule
 
 ### First Milestone (Fri Apr 15)
-* Semi-complete GUI frontend.
-* Ability to draw at least one shape
+* Semi-complete GUI frontend. **done**
+* Ability to draw at least one shape **partial**
   and disaplay properties of drawn objects.
-* Export image to SVG.
+* Export image to SVG. **not implemented yet**
 
 ### Second Milestone (Fri Apr 22)
 * Complete GUI frontend
@@ -43,7 +44,7 @@ If an application will be able to store and render the same SVG document without
 ## Group Responsibilities
 
 ### Dmitri Kheifets @tetra-d
-Will be working on implementation of SVG document structure and it's elements, import/export of SVG document and event handling.
+Will be working on implementation of SVG document structure and it's elements, import/export of SVG document, event handling and overall application architecture.
 
 ### Ian Roberts @ia-n
 Ian Roberts will be working on adding the shape components as well as implementing the event handling using respective libraries.
