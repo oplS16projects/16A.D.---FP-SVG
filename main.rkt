@@ -41,19 +41,106 @@
                                  (list (append mouse-d-pos
                                                (list (send event get-x)
                                                      (send event get-y)))))))
-          ((send event dragging?)
+        #|  ((send event dragging?)
            ;(begin
              (send canv-bitmap-dc draw-line
                    (car mouse-d-pos)
                    (cadr mouse-d-pos)
-                   (send event get-x)
-                   (send event get-y))
+                   (send event get-y)
+                   (send event get-x))
              ;)
-           ))
+           )
+|#
+    ;  (define rect (λ ()
+        ;  (define rect (λ ()
+                         ((send event dragging?)
+
+;(define (shape-to-draw var-if-needed)
+
+(let (( y1-coorid (cadr mouse-d-pos))
+       (x1-coorid (car mouse-d-pos)))
+(define x2-coorid ((λ () (send event get-x))))
+(define y2-coorid ((λ () (send event get-y))))
+(define y-run     ((λ () (abs (- y2-coorid  y1-coorid)))))
+(define x-run     ((λ () (abs (- x2-coorid x1-coorid)))))
+(define x-start   ((λ () (min x1-coorid x2-coorid))))
+(define y-start   ((λ () (min y1-coorid y2-coorid))))
+                             
+(define make-perfect-shape ((λ ()  (max x-run y-run))))
+  
+
+                          (define line
+(send canv-bitmap-dc draw-line
+                   x-start
+                  y-start
+                   y2-coorid
+                   x2-coorid))
+
+  (define rectangle 
+
+         
+  (send canv-bitmap-dc draw-rectangle
+                    x-start
+                    y-start
+                    x-run
+                    y-run))
+(define square  
+
+         
+  (send canv-bitmap-dc draw-rectangle
+                    x-start
+                   y-start
+
+
+                   make-perfect-shape
+                    make-perfect-shape))
+  
+
+  (define ellipse
+
+         
+  (send canv-bitmap-dc draw-ellipse
+                    x-start
+                    y-start
+                   x-run
+                    y-run))
+
+
+  (define circle
+
+         
+  (send canv-bitmap-dc draw-ellipse
+                 x-start
+                 y-start
+                   make-perfect-shape
+                    make-perfect-shape
+                    ))
+
+
+  
+
+
+(define (dispatch m )
+
+  ( cond ((equal? m 'rectangle ) rectangle)
+         ((equal? m 'ellipse ) ellipse)
+        ((equal? m 'circle ) circle)
+        ((equal? m 'line ) line)
+        ((equal? m 'square ) square)
+         (else (error "something bad happend" ))))
+
+dispatch 
+
+  )
+
+ 
+);))
+          );one to close cond
         (send m-wnd-canv refresh-now)))
     (define/override (on-char event)
       'a)
-    (super-new)))
+    (super-new))
+  )
 
 
 ;;;Main Window Canvas, and canvas dc

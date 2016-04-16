@@ -45,10 +45,43 @@
      [label "Toolbar"])
 
 (new button% [parent m-wnd-pane_tool]
-     [label "--?--"]
+     [label "Line"]
      [min-width 50]
      [min-height 40]
-     [callback tool-call0])
+     [callback Line-evnt-btn])
+
+
+(new button% [parent m-wnd-pane_tool]
+     [label "Circle"]
+     [min-width 50]
+     [min-height 40]
+     [callback Circle-evnt-btn])
+
+(new button% [parent m-wnd-pane_tool]
+     [label "Oval"]
+     [min-width 50]
+     [min-height 40]
+     [callback Oval-evnt-btn])
+
+(new button% [parent m-wnd-pane_tool]
+     [label "Square"]
+     [min-width 50]
+     [min-height 40]
+     [callback Square-evnt-btn])
+
+(new button% [parent m-wnd-pane_tool]
+     [label "Rectangle"]
+     [min-width 50]
+     [min-height 40]
+     [callback Rectangle-evnt-btn])
+
+
+
+(new button% [parent m-wnd-pane_tool]
+     [label "Ellipse"]
+     [min-width 50]
+     [min-height 40]
+     [callback Ellipse-evnt-btn])
 
 (new button% [parent m-wnd-pane_tool]
      [label "--?--"]
@@ -81,43 +114,13 @@
      [callback tool-call0])
 
 (new button% [parent m-wnd-pane_tool]
-     [label "--?--"]
+     [label "test"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
 
 (new button% [parent m-wnd-pane_tool]
-     [label "--?--"]
-     [min-width 50]
-     [min-height 40]
-     [callback tool-call0])
-
-(new button% [parent m-wnd-pane_tool]
-     [label "--?--"]
-     [min-width 50]
-     [min-height 40]
-     [callback tool-call0])
-
-(new button% [parent m-wnd-pane_tool]
-     [label "--?--"]
-     [min-width 50]
-     [min-height 40]
-     [callback tool-call0])
-
-(new button% [parent m-wnd-pane_tool]
-     [label "--?--"]
-     [min-width 50]
-     [min-height 40]
-     [callback tool-call0])
-
-(new button% [parent m-wnd-pane_tool]
-     [label "--?--"]
-     [min-width 50]
-     [min-height 40]
-     [callback tool-call0])
-
-(new button% [parent m-wnd-pane_tool]
-     [label "--?--"]
+     [label "test"]
      [min-width 50]
      [min-height 40]
      [callback tool-call0])
@@ -133,19 +136,19 @@
 
 (new button% [parent m-wnd-button_pane]
      [label "?"]
-     [callback button-call0])
+     [callback tool-call0])
 (new button% [parent m-wnd-button_pane]
      [label "Clear"]
-     [callback button-call0])
+     [callback tool-call0])
 (new button% [parent m-wnd-button_pane]
      [label "Save"]
-     [callback button-call0])
+     [callback tool-call0])
 (new button% [parent m-wnd-button_pane]
      [label "Test Color"]
-     [callback button-call0])
+     [callback tool-call0])
 (new button% [parent m-wnd-button_pane]
      [label "?"]
-     [callback button-call0])
+     [callback tool-call0])
 
 
 (send m-wnd show #t)
