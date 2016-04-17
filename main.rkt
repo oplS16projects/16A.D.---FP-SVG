@@ -6,7 +6,6 @@
 
 (define nil '())
 
-;(define mouse-d-pos (list 0 0))
 (define obj-list '())
 
 
