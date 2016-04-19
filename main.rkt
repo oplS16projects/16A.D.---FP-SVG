@@ -6,6 +6,7 @@
 
 (define nil '())
 
+;(define mouse-d-pos (list 0 0))
 (define obj-list '())
 
 
@@ -19,15 +20,8 @@
         (current-brush '()))
          
 
-    ; Set initial pointer coordinates,
-    ; set current drawing  tool.
-    (define (d-begin event)
-      (set! mouse-start-p
-            (list (send event get-x)
-                  (send event get-y)))
-      (set-current-tool (mk-current-tool
-                         (maingui 'get-current-tool))))
-
+    ;sqr
+    (define (sqr x) (* x x))
 
     ; Current tool selector
     (define (mk-current-tool type)
@@ -77,13 +71,21 @@
 
     ; mk pointer start-end "square"
     (define (mk-mouse-square [params #f])
-      (set! mouse-square (if (not params)
-                            (list (car mouse-start-p)
-                                  (cadr mouse-start-p)
-                                  (car mouse-current-p)
-                                  (cadr mouse-current-p))
-                            params)))
+      (begin (set! mouse-square (if (not params)
+                                    (append mouse-start-p
+                                            mouse-current-p)
+                                    params))
+             mouse-square))
+
     
+    ; Set initial pointer coordinates,
+    ; set current drawing  tool.
+    (define (d-begin event)
+      (set! mouse-start-p
+            (list (send event get-x)
+                  (send event get-y)))
+      (set-current-tool (mk-current-tool
+                         (maingui 'get-current-tool))))
     
     ; Shape accessor
     (define (d-draw event [type #f])
@@ -97,9 +99,26 @@
             ((not type) (cadr current-tool))
             (else  (cadr (mk-current-tool type)))))
       
-    ;sqr
-    (define (sqr x) (* x x))
-    
+
+    (define (d-param [params #f])
+      (let ((tool (car current-tool))
+            (mouse-sq (mk-mouse-square params)))
+        (cond ((eq? tool 'line) mouse-sq)
+              ((eq? tool 'circle)
+               (let ((cx (car mouse-square))
+                     (cy (cadr mouse-square))
+                     (r  (sqrt (+ (sqr (- (car mouse-square)
+                                          (caddr mouse-square)))
+                                  (sqr (- (cadr mouse-square)
+                                          (cadddr mouse-square)))))))
+                 (list (- cx (/ r 2))
+                       (- cy (/ r 2))
+                       r)))
+              (else mouse-sq))))
+              
+            
+        
+
     ;; Shape-specific procedures
     ;Line - coords x1, y1, x2, y2
     (define (line [params #f])
@@ -120,8 +139,8 @@
                          (sqr (- (cadr mouse-square)
                                  (cadddr mouse-square)))))))
       (send (maingui 'get-bmp-dc) draw-ellipse
-            cx
-            cy
+            (- cx (/ r 2))
+            (- cy (/ r 2))
             r
             r)))
       
@@ -132,9 +151,9 @@
     (define (dispatch msg)
       (cond ((eq? msg 'begin) d-begin)
             ((eq? msg 'draw)  d-draw)
+            ;((eq? msg 'end)  d-end)
             ((eq? msg 'get-mg) maingui)
-            ((eq? msg 'get-mouse) (append mouse-start-p
-                                          mouse-current-p))
+            ((eq? msg 'get-mouse) (mk-mouse-square))
             ((eq? msg 'get-tool-type) (car current-tool))))
             ;((eq? msg 'end) )))
     dispatch))
