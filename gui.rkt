@@ -2,7 +2,28 @@
 (require racket/gui/base)
 (require racket/draw)
 
-;;;;; GUI
+;;;;; GUI one-time Constructor.
+;;;;; Used in main.rkt
+;;
+;; Dispatch Messages :
+;;
+;;	'bmp-resize - stretch bitmap to current canvas dimentions
+;;	'clear-bmp - clear bitmap
+;;	'refresh-canvas - force immediate canvas update
+;;	('set-canvas) - takes in an s-canvas% class as argument,
+;;					initializes s-canvas object.
+;;	'get-bmp-dc - returns bitmap's drawing context
+;;	'get-current-tool - returns symbol identifying current shape (current-tool).
+;;						Current-tool is set in callback procedure triggered by
+;;						toolbox gui controls/buttons.
+;;
+;;	'get-current-util - returns symbol id'ing current utility/function
+;;						(open, save, etc.) (not implemented yet)
+;;	'get-util-btns - list of utility box controls,
+;;					 each paired with id symbol in a sublist.
+;;	'get-tool-btns - list of tool box controls,
+;;					 each paired with id symbol in a sublist.
+;;
 
 
 ;; Main window constructor
@@ -126,8 +147,9 @@
   (define m-wnd-canvas '())
 
   ;; Bitmap for drawing, and bitmap-dc
-  (define bmp '())
-  (define bmp-dc (new bitmap-dc% [bitmap #f]))
+  (define bmp (make-object bitmap% 1 1))
+  (define bmp-dc (new bitmap-dc%
+                      [bitmap bmp]))
  
 
 
