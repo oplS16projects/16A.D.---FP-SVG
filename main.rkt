@@ -4,79 +4,218 @@
 
 (require "./gui.rkt")
 
-(define mouse-d-pos (list 0 0))
+(define nil '())
 
-(define tstE (λ(obj e)(begin (send canv-bitmap-dc clear)
-                             (set! obj-list (list '(0 0 0 0)))
-                             (send m-wnd-canv refresh-now))))
-
-
-(define tst (λ(obj e) 'a))
-(define p-callback (λ (canvas dc) (send dc draw-bitmap canv-bitmap 0 0)))
-
-(define obj-list (list '(0 0 0 0)))
-(define (del-obj obj olist) (filter (λ(x)(not(equal? x obj))) olist))
-(define draw-object (λ(x y x2 y2)(send canv-bitmap-dc draw-line
-                                        x
-                                        y
-                                        x2
-                                        y2)))
-(define (draw-object-all o-list)
-  (map (λ(x)(apply draw-object x)) o-list))
+;(define mouse-d-pos (list 0 0))
+(define obj-list '())
 
 
-;Canvas% class override for event handling
+;; Draw class
+(define (drawing maingui)
+  (let ((mouse-start-p '())
+        (mouse-current-p '())
+        (mouse-square '())
+        (current-tool '())
+        (current-pen '())
+        (current-brush '()))
+         
+
+    ;sqr
+    (define (sqr x) (* x x))
+
+    ; Current tool selector
+    (define (mk-current-tool type)
+      (cond ((eq? type 'line) (list 'line
+                                    line))
+            ((eq? type 'circle) (list 'circle
+                                      circle))
+            (else (list 'nothing
+                        (λ([var #f]) 'emptylambda)))))
+
+    ;Set current tool
+    (define (set-current-tool tool-pair)
+      (set! current-tool tool-pair))
+      
+
+    ; Make pen
+    (define (mk-pen)
+      (set! current-pen (new pen%
+                          [color "red"]
+                          [width 5]
+                          [style 'solid])))
+    ; Make brush
+    (define (mk-brush)
+      (set! current-brush (new brush%
+                               [color (make-object
+                                          color%
+                                        10
+                                        10
+                                        10
+                                        0.0)]))) ; alpha
+            
+
+    ; Set current pen
+    (define (set-dc-pen)
+      (send (maingui 'get-bmp-dc) set-pen current-pen))
+    ; Set current brush
+    (define (set-dc-brush)
+      (send (maingui 'get-bmp-dc) set-brush current-brush))
+
+
+    ; Set current pointer coord
+    (define (set-mouse-current event)
+      (if (null? event) #f
+          (set! mouse-current-p
+                (list (send event get-x)
+                      (send event get-y)))))
+
+    ; mk pointer start-end "square"
+    (define (mk-mouse-square [params #f])
+      (begin (set! mouse-square (if (not params)
+                                    (append mouse-start-p
+                                            mouse-current-p)
+                                    params))
+             mouse-square))
+
+    
+    ; Set initial pointer coordinates,
+    ; set current drawing  tool.
+    (define (d-begin event)
+      (set! mouse-start-p
+            (list (send event get-x)
+                  (send event get-y)))
+      (set-current-tool (mk-current-tool
+                         (maingui 'get-current-tool))))
+    
+    ; Shape accessor
+    (define (d-draw event [type #f])
+      (mk-pen)
+      (set-dc-pen)
+      (mk-brush)
+      (set-dc-brush)
+      (set-mouse-current event)
+      (cond ((null? current-tool)
+             (error "current-tool not initialized"))
+            ((not type) (cadr current-tool))
+            (else  (cadr (mk-current-tool type)))))
+      
+
+    (define (d-param [params #f])
+      (let ((tool (car current-tool))
+            (mouse-sq (mk-mouse-square params)))
+        (cond ((eq? tool 'line) mouse-sq)
+              ((eq? tool 'circle)
+               (let ((cx (car mouse-square))
+                     (cy (cadr mouse-square))
+                     (r  (sqrt (+ (sqr (- (car mouse-square)
+                                          (caddr mouse-square)))
+                                  (sqr (- (cadr mouse-square)
+                                          (cadddr mouse-square)))))))
+                 (list (- cx (/ r 2))
+                       (- cy (/ r 2))
+                       r)))
+              (else mouse-sq))))
+              
+            
+        
+
+    ;; Shape-specific procedures
+    ;Line - coords x1, y1, x2, y2
+    (define (line [params #f])
+      (mk-mouse-square params)
+      (send (maingui 'get-bmp-dc) draw-line
+              (car mouse-square)
+              (cadr mouse-square)
+              (caddr mouse-square)
+              (cadddr mouse-square)))
+
+    ;Circle - coords cx, cy, r
+    (define (circle [params #f])
+      (mk-mouse-square params)
+      (let ((cx (car mouse-square))
+            (cy (cadr mouse-square))
+            (r  (sqrt (+ (sqr (- (car mouse-square)
+                                 (caddr mouse-square)))
+                         (sqr (- (cadr mouse-square)
+                                 (cadddr mouse-square)))))))
+      (send (maingui 'get-bmp-dc) draw-ellipse
+            (- cx (/ r 2))
+            (- cy (/ r 2))
+            r
+            r)))
+      
+    ;; -------------------------
+
+    
+    ; dispatch
+    (define (dispatch msg)
+      (cond ((eq? msg 'begin) d-begin)
+            ((eq? msg 'draw)  d-draw)
+            ;((eq? msg 'end)  d-end)
+            ((eq? msg 'get-mg) maingui)
+            ((eq? msg 'get-mouse) (mk-mouse-square))
+            ((eq? msg 'get-tool-type) (car current-tool))))
+            ;((eq? msg 'end) )))
+    dispatch))
+
+; Elements constructor
+(define (element type param)
+  (let ((t type)
+        (p param))
+    (define (dispatch msg)
+      (cond ((eq? msg 'get-param) p)
+            ((eq? msg 'get-type) t)))
+    dispatch))
+; ===========================================================
+
+
+
+;; Canvas% class override for event handling
 (define s-canvas%
   (class canvas% 
     (define/override (on-event event)
       (begin
-        (send canv-bitmap-dc clear)
-        (draw-object-all obj-list)
+        (main-gui 'clear-bmp)
+        (draw-all-elements obj-list)
         (cond
           ((send event button-down?)
-           (set! mouse-d-pos (list (send event get-x)
-                                         (send event get-y))))
+           ((main-draw 'begin) event))
+                  ;((main-draw 'draw) event)))
+          
           ((send event button-up?)
-           (set! obj-list (append obj-list
-                                 (list (append mouse-d-pos
-                                               (list (send event get-x)
-                                                     (send event get-y)))))))
+           (set! obj-list (append obj-list (list (element
+                                                  (main-draw 'get-tool-type)
+                                                  (main-draw 'get-mouse))))))
+          
           ((send event dragging?)
-           ;(begin
-             (send canv-bitmap-dc draw-line
-                   (car mouse-d-pos)
-                   (cadr mouse-d-pos)
-                   (send event get-x)
-                   (send event get-y))
-             ;)
-           ))
-        (send m-wnd-canv refresh-now)))
-    (define/override (on-char event)
-      'a)
-    (super-new)))
+           [((main-draw 'draw) event)]))
+        (main-gui 'refresh-canvas)))
+;      (define/override (on-char event)
+;        'a)
+    
+    (super-new)
+    ))
+  
+; =====================================================================
 
 
-;;;Main Window Canvas, and canvas dc
-;Canvas is placed in a main window pane defined in GUI.rkt
-(define m-wnd-canv (new s-canvas%
-                        [parent m-wnd-pane]
-                        [paint-callback p-callback]))
+; Init main-gui object
+(define main-gui (mk-gui))
 
-(define m-wnd-canv-dc (send m-wnd-canv get-dc))
+; Init drawing object
+(define main-draw (drawing main-gui))
 
-;; Bitmap for drawing, and bitmap-dc
-(provide canv-bitmap)
-(provide canv-bitmap-dc)
+; GUI prep and display
+(define (gui-init)
+  ((main-gui 'set-canvas) s-canvas%)
+  (main-gui 'show)
+  (main-gui 'bmp-resize))  ; Set bitmap to canvas size)
 
-(define canv-bitmap (make-object bitmap% 1 1))
-(define canv-bitmap-dc (new bitmap-dc% [bitmap canv-bitmap]))
+(gui-init)
 
-;Set bitmap width-height to canvas size
-(set! canv-bitmap (make-object bitmap%
-                    (send m-wnd-canv get-width)
-                    (send m-wnd-canv get-height)))
-(send canv-bitmap-dc set-bitmap canv-bitmap)
 
-;;define demo color and set pen for canvas-dc
-(define black (make-object color% 10 10 10))
-(send canv-bitmap-dc set-pen black 5 'solid)
+;(define (del-obj obj olist) (filter (λ(x)(not(equal? x obj))) olist))
+(define (draw-element obj) ([(main-draw 'draw) nil (obj 'get-type)] (obj 'get-param)))
+  
+(define (draw-all-elements o-list)
+    (map (λ(x)(draw-element x)) o-list))
