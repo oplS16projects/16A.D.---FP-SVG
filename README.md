@@ -37,11 +37,11 @@ If an application will be able to store and render the same SVG document without
  * **##not implemented yet**
 
 ### Second Milestone (Fri Apr 22)
-* Complete GUI frontend
-* Import from SVG.
+* Complete GUI frontend **##unmet**
+* Import from SVG. **##unmet**
 * Ability to modify properties of individual
-  shapes placed on canvas.
-* More shapes added.
+  shapes placed on canvas. **##unmet**
+* More shapes added. **##unmet**
 
 ### Final Presentation (last week of semester)
 * Refining the code/documentation,
