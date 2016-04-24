@@ -18,7 +18,8 @@
         (mouse-square '())
         (current-tool '())
         (current-pen '())
-        (current-brush '()))
+        (current-brush '())
+        (drawing? #f))
          
 
     ;sqr
@@ -55,6 +56,10 @@
                                         0.0)]))) ; alpha
             
 
+    ; Set drawing? var to check for non-drawing events
+    (define (set-drawing? tf)
+      (set! drawing? tf))
+    
     ; Set current pen
     (define (set-dc-pen)
       (send (maingui 'get-bmp-dc) set-pen current-pen))
@@ -89,6 +94,7 @@
     ; set current drawing  tool.
     (define (d-begin event)
       (set-mouse-start event)
+      (set-mouse-current event)
       (set-current-tool (mk-current-tool
                          (maingui 'get-current-tool))))
     
@@ -140,10 +146,11 @@
     (define (dispatch msg)
       (cond ((eq? msg 'begin) d-begin)
             ((eq? msg 'draw)  d-draw)
-            ;((eq? msg 'end)  d-end)
             ((eq? msg 'get-mg) maingui)
             ((eq? msg 'get-mouse) (mk-mouse-square))
-            ((eq? msg 'get-tool-type) (car current-tool))))
+            ((eq? msg 'get-tool-type) (car current-tool))
+            ((eq? msg 'drawing?) drawing?)
+            ((eq? msg 'set-drawing?) set-drawing?)))
             ;((eq? msg 'end) )))
     dispatch))
 
@@ -169,13 +176,15 @@
         (cond
           ((send event button-down?)
            ((main-draw 'begin) event))
-                  ;((main-draw 'draw) event)))
           
           ((send event button-up?)
-           ((main-svg 'add-shape) (main-draw 'get-tool-type)
-                                  (main-draw 'get-mouse)))
+           (cond ((main-draw 'drawing?)
+                  ((main-svg 'add-shape) (main-draw 'get-tool-type)
+                                         (main-draw 'get-mouse))))
+           ((main-draw 'set-drawing?) #f))
           
           ((send event dragging?)
+           ((main-draw 'set-drawing?) #t)
            [((main-draw 'draw) event)]))
         (main-gui 'refresh-canvas)))
 ;      (define/override (on-char event)
