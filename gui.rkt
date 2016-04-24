@@ -18,6 +18,8 @@
 ;; 'set-svg - sets "svg" variable. Svg object is used to build
 ;;            elements list, importing/exporting svg and for
 ;;            other operations on the list of drawn shapes.
+;; 'svg-resize - sets width/height property for svg document.
+;;               Invokes procedure from svg object.
 ;;
 ;;	'get-bmp-dc - returns bitmap's drawing context
 ;;	'get-current-tool - returns symbol identifying current shape (current-tool).

@@ -1,6 +1,20 @@
 #lang racket
 (require xml)
 
+;;; Module to store list of elements placed on canvas,
+;;; and for export/import of SVG documents. Used in "main.rkt".
+;;
+;; Dispatch Messages (work in progress):
+;;
+;;      'add-shape - add shape element to the list of elements
+;;
+;;      'get-e-list - retrieve list of elements
+;;
+;;      'set-wh - set width/height property of SVG document
+;;
+;;      'save - export SVG document
+
+
 ;;processing insruction
 (define proc-inst (p-i 'racket
                        'racket
