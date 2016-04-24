@@ -143,10 +143,10 @@
                                [alignment (list 'center 'center)]))
 
   ;; Utility buttons
-  (set! btn_lst (list '("?" nothing)
-                      '("Clear" clear)
+  (set! btn_lst (list '("-n-" n)
+                      '("-n-" n)
                       '("Save" save)
-                      '("?" nothing)))
+                      '("-n-" n)))
   (define util-buttons (mk_buttons m-wnd-util_pane
                                    btn_lst
                                    util-callback))
