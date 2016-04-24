@@ -1,5 +1,7 @@
 # Project Title: SVG Editor
 
+  [**Jump to the progress**](https://github.com/oplS16projects/SkraM---FP-SVG/blob/master/README.md#progress)
+
 ### Statement
 The goal of this project is to implement XML-based Scalable Vector Graphics specification on a limited basis and to provide means to edit svg documents graphically.
 
