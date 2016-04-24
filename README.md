@@ -27,8 +27,9 @@ If an application will be able to store and render the same SVG document without
 ### Progress
  Goals for the second milestone are met partially. Currently, the framework of application is almost complete, basic functionality is
  in place - drawing shapes, exporting image to SVG.
- Sample output:
- ![sample][sample-out]
+ 
+ **Sample SVG output generated with SkraM:**
+  ![sample][sample-out]
  
 ### First Milestone (Fri Apr 15)
 * Semi-complete GUI frontend.
@@ -60,4 +61,4 @@ Will be working on implementation of SVG document structure and it's elements, i
 Ian Roberts will be working on adding the shape components as well as implementing the event handling using respective libraries.
 <!-- Links -->
 [archdiagram]: ./archchart.png
-[sample-out]: ./test.svg
+[sample-out]: https://raw.githubusercontent.com/oplS16projects/SkraM---FP-SVG/master/test.svg
