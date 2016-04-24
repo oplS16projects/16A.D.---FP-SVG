@@ -3,11 +3,12 @@
 (require racket/draw)
 
 (require "./gui.rkt")
+(require "./svg.rkt")
 
 (define nil '())
 
 ;(define mouse-d-pos (list 0 0))
-(define obj-list '())
+;(define obj-list '())
 
 
 ;; Draw class
@@ -27,9 +28,9 @@
     (define (mk-current-tool type)
       (cond ((eq? type 'line) (list 'line
                                     line))
-            ((eq? type 'circle) (list 'circle
-                                      circle))
-            (else (list 'nothing
+            ((eq? type 'ellipse) (list 'ellipse
+                                      ellipse))
+            (else (list 'n
                         (λ([var #f]) 'emptylambda)))))
 
     ;Set current tool
@@ -69,6 +70,12 @@
                 (list (send event get-x)
                       (send event get-y)))))
 
+    ; Set starting pointer coord
+    (define (set-mouse-start event)
+      (set! mouse-start-p
+            (list (send event get-x)
+                  (send event get-y))))
+
     ; mk pointer start-end "square"
     (define (mk-mouse-square [params #f])
       (begin (set! mouse-square (if (not params)
@@ -81,9 +88,7 @@
     ; Set initial pointer coordinates,
     ; set current drawing  tool.
     (define (d-begin event)
-      (set! mouse-start-p
-            (list (send event get-x)
-                  (send event get-y)))
+      (set-mouse-start event)
       (set-current-tool (mk-current-tool
                          (maingui 'get-current-tool))))
     
@@ -100,21 +105,21 @@
             (else  (cadr (mk-current-tool type)))))
       
 
-    (define (d-param [params #f])
-      (let ((tool (car current-tool))
-            (mouse-sq (mk-mouse-square params)))
-        (cond ((eq? tool 'line) mouse-sq)
-              ((eq? tool 'circle)
-               (let ((cx (car mouse-square))
-                     (cy (cadr mouse-square))
-                     (r  (sqrt (+ (sqr (- (car mouse-square)
-                                          (caddr mouse-square)))
-                                  (sqr (- (cadr mouse-square)
-                                          (cadddr mouse-square)))))))
-                 (list (- cx (/ r 2))
-                       (- cy (/ r 2))
-                       r)))
-              (else mouse-sq))))
+;    (define (d-param [params #f])
+;      (let ((tool (car current-tool))
+;            (mouse-sq (mk-mouse-square params)))
+;        (cond ((eq? tool 'line) mouse-sq)
+;              ((eq? tool 'circle)
+;               (let ((cx (car mouse-square))
+;                     (cy (cadr mouse-square))
+;                     (r  (sqrt (+ (sqr (- (car mouse-square)
+;                                          (caddr mouse-square)))
+;                                  (sqr (- (cadr mouse-square)
+;                                          (cadddr mouse-square)))))))
+;                 (list (- cx (/ r 2))
+;                       (- cy (/ r 2))
+;                       r)))
+;              (else mouse-sq))))
               
             
         
@@ -130,20 +135,28 @@
               (cadddr mouse-square)))
 
     ;Circle - coords cx, cy, r
-    (define (circle [params #f])
+    (define (ellipse [params #f])
       (mk-mouse-square params)
-      (let ((cx (car mouse-square))
-            (cy (cadr mouse-square))
-            (r  (sqrt (+ (sqr (- (car mouse-square)
-                                 (caddr mouse-square)))
-                         (sqr (- (cadr mouse-square)
-                                 (cadddr mouse-square)))))))
-      (send (maingui 'get-bmp-dc) draw-ellipse
-            (- cx (/ r 2))
-            (- cy (/ r 2))
-            r
-            r)))
-      
+      (let ((sx (min (car mouse-square)
+                     (caddr mouse-square)))
+            (sy (min (cadr mouse-square)
+                     (cadddr mouse-square)))
+            (w (abs (- (caddr mouse-square)
+                       (car mouse-square))))
+            (h (abs (- (cadddr mouse-square)
+                       (cadr mouse-square)))))
+        (mk-mouse-square (list sx sy (+ sx w)  (+ sy h)))
+        (send (maingui 'get-bmp-dc) draw-ellipse
+              sx
+              sy
+              w
+              h)))
+              ;(min sx ex)
+;              (min sy ey)
+;              (abs (- sx ex))
+;              (abs (- sy ey)))))
+    
+
     ;; -------------------------
 
     
@@ -176,16 +189,18 @@
     (define/override (on-event event)
       (begin
         (main-gui 'clear-bmp)
-        (draw-all-elements obj-list)
+        (draw-all-elements (main-svg 'get-e-list))
         (cond
           ((send event button-down?)
            ((main-draw 'begin) event))
                   ;((main-draw 'draw) event)))
           
           ((send event button-up?)
-           (set! obj-list (append obj-list (list (element
-                                                  (main-draw 'get-tool-type)
-                                                  (main-draw 'get-mouse))))))
+;           (set! obj-list (append obj-list (list (element
+;                                                  (main-draw 'get-tool-type)
+;                                                  (main-draw 'get-mouse))))))
+           ((main-svg 'add-shape) (main-draw 'get-tool-type)
+                                  (main-draw 'get-mouse)))
           
           ((send event dragging?)
            [((main-draw 'draw) event)]))
@@ -199,23 +214,32 @@
 ; =====================================================================
 
 
+
+; ==============================Inits==================================
 ; Init main-gui object
 (define main-gui (mk-gui))
 
 ; Init drawing object
 (define main-draw (drawing main-gui))
 
+; Init svg module
+(define main-svg (svg))
+  
 ; GUI prep and display
 (define (gui-init)
+  ((main-gui 'set-svg) main-svg) ;Set svg object to work with
   ((main-gui 'set-canvas) s-canvas%)
   (main-gui 'show)
-  (main-gui 'bmp-resize))  ; Set bitmap to canvas size)
+  (main-gui 'bmp-resize)  ; Set bitmap to canvas size (also sets svg w/h)
+  (main-gui 'svg-resize))
 
 (gui-init)
+; ====================================================================
 
 
 ;(define (del-obj obj olist) (filter (λ(x)(not(equal? x obj))) olist))
-(define (draw-element obj) ([(main-draw 'draw) nil (obj 'get-type)] (obj 'get-param)))
+(define (draw-element element) ([(main-draw 'draw) nil (element 'get-type)]
+                                (element 'get-param)))
   
-(define (draw-all-elements o-list)
-    (map (λ(x)(draw-element x)) o-list))
+(define (draw-all-elements e-list)
+    (map (λ(x)(draw-element x)) e-list))
