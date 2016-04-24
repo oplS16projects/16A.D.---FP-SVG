@@ -2,6 +2,8 @@
 (require racket/gui/base)
 (require racket/draw)
 
+(require "./svg.rkt")
+
 ;;;;; GUI one-time Constructor.
 ;;;;; Used in main.rkt
 ;;
@@ -10,8 +12,13 @@
 ;;	'bmp-resize - stretch bitmap to current canvas dimentions
 ;;	'clear-bmp - clear bitmap
 ;;	'refresh-canvas - force immediate canvas update
+; 
 ;;	('set-canvas) - takes in an s-canvas% class as argument,
 ;;					initializes s-canvas object.
+;; 'set-svg - sets "svg" variable. Svg object is used to build
+;;            elements list, importing/exporting svg and for
+;;            other operations on the list of drawn shapes.
+;;
 ;;	'get-bmp-dc - returns bitmap's drawing context
 ;;	'get-current-tool - returns symbol identifying current shape (current-tool).
 ;;						Current-tool is set in callback procedure triggered by
@@ -42,13 +49,16 @@
             bmp
             0 0)))
 
+  
   ; Selected util
   (define current-util '())
   ; Common util-box buttons callback
   (define util-callback
     (λ (obj event)
-      (set! current-util 
-            (cadr (assq obj util-buttons)))))
+      (begin (set! current-util 
+                   (cadr (assq obj util-buttons)))
+             (cond ((eq? current-util 'save)
+                    [(svg 'save) (put-file)])))))
 
   
   ; Selected tool
@@ -110,12 +120,12 @@
        [label "Toolbar"])
   
   ;; Tool-box buttons
-  (define btn_lst (list '("Line" line) '("Circle" circle)
-                        '("--n--" nothing) '("--n--" nothing)
-                         '("--n--" nothing) '("--n--" nothing)
-                         '("--n--" nothing) '("--n--" nothing)
-                         '("--n--" nothing) '("--n--" nothing)
-                         '("--n--" nothing)))
+  (define btn_lst (list '("Line" line) '("Ellipse" ellipse)
+                        '("--n--" n) '("--n--" n)
+                         '("--n--" n) '("--n--" n)
+                         '("--n--" n) '("--n--" n)
+                         '("--n--" n) '("--n--" n)
+                         '("--n--" n)))
   
   (define tool-box-buttons (mk_buttons m-wnd-tool_pane
                                        btn_lst
@@ -174,6 +184,16 @@
                             [parent m-wnd_pane]
                             [paint-callback p-callback])))
 
+  ;; Set drawn shapes list to operate on
+  (define svg '())
+  (define (set-svg svg-obj)
+    (set! svg svg-obj))
+
+  ;; Resize SVG
+  (define (svg-resize)
+    ((svg 'set-wh) (send m-wnd-canvas get-width)
+                   (send m-wnd-canvas get-height)))
+
   ;; Clear bitmap
   (define (clear-bmp)
     (send bmp-dc clear))
@@ -186,11 +206,14 @@
   (define (dispatch msg)
     (cond ((eq? msg 'show) (show-gui))
 
+          ((eq? msg 'svg-resize) (svg-resize))
+          
           ((eq? msg 'bmp-resize) (bmp-resize))
           ((eq? msg 'clear-bmp) (clear-bmp))
           ((eq? msg 'refresh-canvas) (refresh-canvas))
 
           ((eq? msg 'set-canvas) set-canvas)
+          ((eq? msg 'set-svg) set-svg)
 
           ((eq? msg 'get-bmp-dc) bmp-dc)
           ((eq? msg 'get-current-tool) current-tool)
