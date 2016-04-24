@@ -25,7 +25,10 @@ If an application will be able to store and render the same SVG document without
 ## Schedule
 
 ### Progress
- Goals for the first milstone are met only partially. Most of the work done is related to application's architecture.
+ Goals for the second milestone are met partially. Currently, the framework of application is almost complete, basic functionality is
+ in place - drawing shapes, exporting image to SVG.
+ Sample output:
+ ![sample][sample-out]
  
 ### First Milestone (Fri Apr 15)
 * Semi-complete GUI frontend.
@@ -37,11 +40,12 @@ If an application will be able to store and render the same SVG document without
  * **##not implemented yet**
 
 ### Second Milestone (Fri Apr 22)
-* Complete GUI frontend **##unmet**
-* Import from SVG. **##unmet**
+* Complete GUI frontend **##partial**
+* Import from SVG. **##not implemented yet**
+* Export image to SVG **##complete**
 * Ability to modify properties of individual
-  shapes placed on canvas. **##unmet**
-* More shapes added. **##unmet**
+  shapes placed on canvas. **##not implemented yet**
+* More shapes added.
 
 ### Final Presentation (last week of semester)
 * Refining the code/documentation,
@@ -56,3 +60,4 @@ Will be working on implementation of SVG document structure and it's elements, i
 Ian Roberts will be working on adding the shape components as well as implementing the event handling using respective libraries.
 <!-- Links -->
 [archdiagram]: ./archchart.png
+[sample-out]: ./test.svg
