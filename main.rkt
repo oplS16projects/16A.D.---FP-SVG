@@ -104,26 +104,7 @@
             ((not type) (cadr current-tool))
             (else  (cadr (mk-current-tool type)))))
       
-
-;    (define (d-param [params #f])
-;      (let ((tool (car current-tool))
-;            (mouse-sq (mk-mouse-square params)))
-;        (cond ((eq? tool 'line) mouse-sq)
-;              ((eq? tool 'circle)
-;               (let ((cx (car mouse-square))
-;                     (cy (cadr mouse-square))
-;                     (r  (sqrt (+ (sqr (- (car mouse-square)
-;                                          (caddr mouse-square)))
-;                                  (sqr (- (cadr mouse-square)
-;                                          (cadddr mouse-square)))))))
-;                 (list (- cx (/ r 2))
-;                       (- cy (/ r 2))
-;                       r)))
-;              (else mouse-sq))))
-              
-            
-        
-
+    ; -------------------------------------------------
     ;; Shape-specific procedures
     ;Line - coords x1, y1, x2, y2
     (define (line [params #f])
@@ -151,13 +132,8 @@
               sy
               w
               h)))
-              ;(min sx ex)
-;              (min sy ey)
-;              (abs (- sx ex))
-;              (abs (- sy ey)))))
-    
 
-    ;; -------------------------
+    ;; ---------------------------------------------------
 
     
     ; dispatch
@@ -196,9 +172,6 @@
                   ;((main-draw 'draw) event)))
           
           ((send event button-up?)
-;           (set! obj-list (append obj-list (list (element
-;                                                  (main-draw 'get-tool-type)
-;                                                  (main-draw 'get-mouse))))))
            ((main-svg 'add-shape) (main-draw 'get-tool-type)
                                   (main-draw 'get-mouse)))
           
