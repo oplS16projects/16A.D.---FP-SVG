@@ -16,65 +16,6 @@
                        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd")
                       #f)
                      '()))
-;
-;;xexpr defs of xml elements 
-;(define text-tag
-;  '(text ((x "50") ;attributes
-;          (y "120")
-;          (font-size "80")
-;          (font-family "Verdana")
-;          (fill "aliceblue"))
-;         "Racket")) ;content
-;
-;;<rect x="0" y="0" width="1500" height="1000" 
-;;        fill="yellow" stroke="blue" stroke-width="12"  />
-;
-;(define rect1-tag
-;  '(rect ((x "0")
-;          (y "0")
-;          (width "400")
-;          (height "200")
-;          (fill "navy"))))
-;
-;(define rect2-tag
-;  '(rect ((x "25")
-;          (y "30")
-;          (width "340")
-;          (height "140")
-;          (fill "red"))))
-;
-;(define svg-body
-;  (list 'svg
-;         '((xmlns "http://www.w3.org/2000/svg")
-;           (version "1.1")
-;           (width "400px")
-;           (height "200px")
-;           (viewbox "0 0 400 200"))
-;         rect1-tag
-;         rect2-tag
-;         text-tag))
-;
-;;complete xml document
-;(define svg-doc (document
-;                 svg-prolog ;doc prolog
-;                 (xexpr->xml svg-body) ;doc body. xexpr to xml.
-;                 '())) ;list of misc items
-;
-;(define out (open-output-file ".\\test.svg" #:exists 'replace))
-;(write-xml svg-doc out)
-;(close-output-port out)
-;
-;(define get-elements (xml->xexpr (document-element svg-doc)))
-; ---------------------------------------------------------------
-
-;;(define tst2 (match svg-doc
-;;  [(struct document (prolog element misc)) element]
-;;  [_ "test"]))
-;;
-;;(define tst3 (match tst2
-;;  [(struct element (start stop name attributes content))
-;;   (cons name attributes)]
-;;  [_ "test"]))
 
 (provide svg)
 (define (svg)
@@ -89,9 +30,11 @@
     
     ;; Add shape to the elements-list
     (define (add-shape type param)
-      (set! elements-list
+      (if (not (eq? type 'n))
+          (set! elements-list
             (append elements-list
-                    (list (make-element type param)))))
+                    (list (make-element type param))))
+          (writeln "add-shape: empty type")))
 
     ;; Element object constructor
     ;; Takes "type" and "coords" of element
@@ -107,7 +50,7 @@
     ;; svg-xml shape types
     (define num->str number->string)
 
-    ; cx="50" cy="50" r="40"
+    ;of type cx="50" cy="50" r="40"
     (define (mk-ellipse element)
       (let ((coords (element 'get-param)))
         (let ((cx (car coords))
@@ -122,7 +65,7 @@
                            (list 'stroke-width "2")
                            (list 'fill-opacity "0.0"))))))
 
-    ; x1="0" y1="0" x2="200" y2="200"
+    ;of type x1="0" y1="0" x2="200" y2="200"
     (define (mk-line element)
       (let ((coords (element 'get-param)))
         (let ((x1 (car coords))
@@ -169,7 +112,9 @@
       (write-xml (mk-svg-doc) out)
       (close-output-port out))
        
-       
+
+
+    ; -------------------------------------------------------   
     ;; Dispatch
     (define (dispatch msg)
       (cond ((eq? msg 'add-shape) add-shape)
