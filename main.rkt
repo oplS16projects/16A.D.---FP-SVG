@@ -40,32 +40,30 @@
       
 
     ; Make pen
-    (define (mk-pen)
-      (set! current-pen (new pen%
-                          [color "red"]
-                          [width 5]
-                          [style 'solid])))
+    (define (set-pen)
+      (set! current-pen (maingui 'get-pen)))
+
     ; Make brush
-    (define (mk-brush)
-      (set! current-brush (new brush%
-                               [color (make-object
-                                          color%
-                                        10
-                                        10
-                                        10
-                                        0.0)]))) ; alpha
-            
+    (define (set-brush)
+      (set! current-brush (maingui 'get-brush)))
+    
 
     ; Set drawing? var to check for non-drawing events
     (define (set-drawing? tf)
       (set! drawing? tf))
     
     ; Set current pen
-    (define (set-dc-pen)
-      (send (maingui 'get-bmp-dc) set-pen current-pen))
+    (define (set-dc-pen [params #f])
+      (send (maingui 'get-bmp-dc) set-pen
+            (if (not params)
+                current-pen
+                (car (cadr params)))))
     ; Set current brush
-    (define (set-dc-brush)
-      (send (maingui 'get-bmp-dc) set-brush current-brush))
+    (define (set-dc-brush [params #f])
+      (send (maingui 'get-bmp-dc) set-brush
+            (if (not params)
+                current-brush
+                (cadr (cadr params)))))
 
 
     ; Set current pointer coord
@@ -81,13 +79,20 @@
             (list (send event get-x)
                   (send event get-y))))
 
-    ; mk pointer start-end "square"
+    ; mk pointer start-end "square".
+    ; optional [params] of type (list (x1 y1 x2 y2) (pen brush))
     (define (mk-mouse-square [params #f])
       (begin (set! mouse-square (if (not params)
                                     (append mouse-start-p
                                             mouse-current-p)
-                                    params))
+                                    (car params)))
              mouse-square))
+
+      ; Make params
+      (define (mk-params)
+        (list (mk-mouse-square)
+              (list current-pen
+                    current-brush)))
 
     
     ; Set initial pointer coordinates,
@@ -100,10 +105,10 @@
     
     ; Shape accessor
     (define (d-draw event [type #f])
-      (mk-pen)
-      (set-dc-pen)
-      (mk-brush)
-      (set-dc-brush)
+      (set-pen)
+      ;(set-dc-pen)
+      (set-brush)
+      ;(set-dc-brush)
       (set-mouse-current event)
       (cond ((null? current-tool)
              (error "current-tool not initialized"))
@@ -115,6 +120,8 @@
     ;Line - coords x1, y1, x2, y2
     (define (line [params #f])
       (mk-mouse-square params)
+      (set-dc-pen params)
+      (set-dc-brush params)
       (send (maingui 'get-bmp-dc) draw-line
               (car mouse-square)
               (cadr mouse-square)
@@ -124,6 +131,8 @@
     ;Circle - coords cx, cy, r
     (define (ellipse [params #f])
       (mk-mouse-square params)
+      (set-dc-pen params)
+      (set-dc-brush params)
       (let ((sx (min (car mouse-square)
                      (caddr mouse-square)))
             (sy (min (cadr mouse-square)
@@ -149,6 +158,7 @@
             ((eq? msg 'get-mg) maingui)
             ((eq? msg 'get-mouse) (mk-mouse-square))
             ((eq? msg 'get-tool-type) (car current-tool))
+            ((eq? msg 'get-params) (mk-params))
             ((eq? msg 'drawing?) drawing?)
             ((eq? msg 'set-drawing?) set-drawing?)))
             ;((eq? msg 'end) )))
@@ -180,7 +190,7 @@
           ((send event button-up?)
            (cond ((main-draw 'drawing?)
                   ((main-svg 'add-shape) (main-draw 'get-tool-type)
-                                         (main-draw 'get-mouse))))
+                                         (main-draw 'get-params))))
            ((main-draw 'set-drawing?) #f))
           
           ((send event dragging?)
