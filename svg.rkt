@@ -50,48 +50,79 @@
                     (list (make-element type param))))
           (writeln "add-shape: empty type")))
 
+    ;; shortcut for number->string
+    (define num->s number->string)
+
+    ;;shortcut for string-append
+    (define str-ap string-append)
+
+    ;; Make rgb(R, G, B) string
+    (define (rgb-string color)
+      (str-ap
+       "rgb("
+       (num->s (send color red)) ","
+       (num->s (send color green)) ","
+       (num->s (send color blue)) ")"
+       ))
+    
     ;; Element object constructor
     ;; Takes "type" and "coords" of element
     (define (make-element type param)
       (let ((t type)
-            (p param))
+            (p param)
+            (pen-color-obj (send (caadr param) get-color))
+            (pen-stroke-w (send (caadr param) get-width))
+            (brush-color-obj (send (car (cdadr param)) get-color)))
         (define (dispatch msg)
           (cond ((eq? msg 'get-param) p)
-                ((eq? msg 'get-type) t)))
+                ((eq? msg 'get-type) t)
+                ((eq? msg 'get-coords) (car p))
+                ((eq? msg 'get-stroke-color) pen-color-obj)
+                ((eq? msg 'get-stroke-op) (send pen-color-obj alpha))
+                ((eq? msg 'get-stroke-w) pen-stroke-w)
+                ((eq? msg 'get-fill-color) brush-color-obj)
+                ((eq? msg 'get-fill-op) (send brush-color-obj alpha))))
         dispatch))
 
     ;; ----------------------------------------------------------
     ;; svg-xml shape types
-    (define num->str number->string)
-
+    (define (misc-attr element)
+      (let ((stroke (rgb-string (element 'get-stroke-color)))
+            (stroke-w (element 'get-stroke-w))
+            (stroke-op (element 'get-stroke-op))
+            (fill (rgb-string (element 'get-fill-color)))
+            (fill-op (element 'get-fill-op)))
+        (list (list 'stroke stroke)
+              (list 'stroke-width (num->s stroke-w))
+              (list 'stroke-opacity (num->s stroke-op))
+              (list 'fill fill)
+              (list 'fill-opacity (num->s fill-op)))))
+    
     ;of type cx="50" cy="50" r="40"
     (define (mk-ellipse element)
-      (let ((coords (element 'get-param)))
+      (let ((coords (car (element 'get-param))))
         (let ((cx (car coords))
               (cy (cadr coords))
               (rx (/ (- (caddr coords) (car coords)) 2.0))
               (ry (/ (- (cadddr coords) (cadr coords)) 2.0)))
-      (list 'ellipse (list (list 'cx (num->str (+ cx rx)))
-                           (list 'cy (num->str (+ cy ry)))
-                           (list 'rx (num->str (abs rx)))
-                           (list 'ry (num->str (abs ry)))
-                           (list 'stroke "black")
-                           (list 'stroke-width "2")
-                           (list 'fill-opacity "0.0"))))))
+          (list 'ellipse (append (list (list 'cx (num->s (+ cx rx)))
+                                       (list 'cy (num->s (+ cy ry)))
+                                       (list 'rx (num->s (abs rx)))
+                                       (list 'ry (num->s (abs ry))))
+                                 (misc-attr element))))))
 
     ;of type x1="0" y1="0" x2="200" y2="200"
     (define (mk-line element)
-      (let ((coords (element 'get-param)))
+      (let ((coords (car (element 'get-param))))
         (let ((x1 (car coords))
               (y1 (cadr coords))
               (x2 (caddr coords))
               (y2 (cadddr coords)))
-          (list 'line (list (list 'x1 (num->str x1))
-                            (list 'y1 (num->str y1))
-                            (list 'x2 (num->str x2))
-                            (list 'y2 (num->str y2))
-                            (list 'stroke "black")
-                            (list 'stroke-width "2"))))))
+          (list 'line (append (list (list 'x1 (num->s x1))
+                                    (list 'y1 (num->s y1))
+                                    (list 'x2 (num->s x2))
+                                    (list 'y2 (num->s y2)))
+                              (misc-attr element))))))
     ;; ----------------------------------------------------------
     
     ; svg-body
@@ -99,12 +130,12 @@
       (append (list 'svg
                     (list (list 'xmlns "http://www.w3.org/2000/svg")
                           (list 'version "1.1")
-                          (list 'width (string-append (num->str svg-width) "px"))
-                          (list 'height (string-append (num->str svg-height) "px"))))
+                          (list 'width (string-append (num->s svg-width) "px"))
+                          (list 'height (string-append (num->s svg-height) "px"))))
 ;                          (list 'viewbox (string-append "0 0 "
-;                                                        (num->str svg-width)
+;                                                        (num->s svg-width)
 ;                                                        " "
-;                                                        (num->str svg-height)))))
+;                                                        (num->s svg-height)))))
               body-elements))
     
     ; generate xml body elements list
