@@ -136,7 +136,10 @@
         (define colors
           (map (λ (x)(send (car x) get-value))
                color-sliders))
-        (mk-pen (mk-color colors))
+        (cond ((eq? current-sf-radio 0)
+               (mk-pen (mk-color colors)))
+              ((eq? current-sf-radio 1)
+               (mk-brush (mk-color colors))))
         
         (send bmp-c-dc set-pen c-pen)
         (send bmp-c-dc set-brush c-brush)
@@ -146,6 +149,16 @@
                    140
                    50)
         (send p-wnd-canvas refresh-now))))
+
+  ; Current radio-box
+  (define current-sf-radio 0)
+  ; Stroke/Fill radio buttons
+  ; common callback
+  (define sf-callback
+    (λ (obj event)
+      (set! current-sf-radio
+            (send sf-radio-box get-selection))
+            (color-callback #f #f)))
   
   ; Properties window frame
   (define p-wnd (new frame%
@@ -153,7 +166,7 @@
                      [x 800]
                      [y 0]
                      [min-width 200]
-                     [min-height 300]
+                     [min-height 350]
                      [style (list 'no-system-menu)]
                      [parent m-wnd]
                      [stretchable-width #f]	 
@@ -175,7 +188,8 @@
   (define bmp-c-dc (new bitmap-dc%
                       [bitmap bmp-c]))
 
-   
+  ;; Generic make sliders.
+  ;; slider_list - (label (range-s range-e) tag)
   (define (mk-sliders gui_parent slider_list callproc)
     (map (λ(x) (list (new slider%
                           [label (car x)]	 
@@ -186,15 +200,43 @@
                           [init-value (caddr x)])
                      (cadddr x)))
          slider_list))
-  
-  (define sliders-lst (list '("R" (0 255) 120 'red-s)
-                            '("G" (0 255) 120 'green-s)
-                            '("B" (0 255) 120 'blue-s)))
 
+  ;; Color sliders list. 
+  (define sliders-lst (list '("R" (0 255) 0 'red-s)
+                            '("G" (0 255) 0 'green-s)
+                            '("B" (0 255) 0 'blue-s)))
+  ;; Generated color slider list
+  ;; of (slider-obj tag) pairs
   (define color-sliders (mk-sliders p-wnd-slider_pane
                                     sliders-lst
                                     color-callback))
-    
+
+
+  ;; Generic make radio-box.
+  ;; radio_list - (label select tag)
+;  (define (mk-radios gui_parent radio_list callproc)
+;    (map (λ(x) (list (new radio-box%	 
+;                          [label (car x)]	 
+;                          [selection (cadr x)]	 
+;                          [parent gui_parent]	 
+;                          [callback callproc]
+;                     (caddr x))))
+;         radio_list))
+
+  ;; Radio-box list
+;  (define radios-lst (list '("Stroke" 1 'stroke)
+;                            '("Fill" 0 'fill)))
+;
+;  (define sf-radio-box (mk-radios p-wnd-slider_pane
+;                                radios-lst
+;                                sf-callback))
+
+  (define sf-radio-box (new radio-box%	 
+                            [label ""]
+                            [choices (list "Stroke" "Fill")]
+                            [selection 0]	 
+                            [parent p-wnd-slider_pane]	 
+                            [callback sf-callback]))
   ; ===========================================================
   
 
