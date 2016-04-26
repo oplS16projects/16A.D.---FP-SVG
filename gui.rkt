@@ -62,7 +62,14 @@
       (begin (set! current-util 
                    (cadr (assq obj util-buttons)))
              (cond ((eq? current-util 'save)
-                    [(svg 'save) (put-file)])))))
+                    [(svg 'save) (put-file)])
+                   ((eq? current-util 'undo)
+                    (begin (svg 'remove-last)
+                           (send m-wnd-canvas
+                                 on-event
+                                 (new mouse-event%	 
+                                      [event-type 'left-down]))
+                           (refresh-canvas)))))))
 
 
   ; Selected tool
@@ -155,6 +162,7 @@
   (define p-wnd-slider_pane (new vertical-pane% [parent p-wnd]
                                  [alignment (list 'center 'center)]))
 
+  ;; Color/prop window canvas
   (define p-wnd-canvas (new canvas%
                             [parent p-wnd-slider_pane]
                             ;[min-width 50]	 
@@ -251,7 +259,7 @@
                                [alignment (list 'center 'center)]))
 
   ;; Utility buttons
-  (set! btn_lst (list '("-n-" n)
+  (set! btn_lst (list '("Undo" undo)
                       '("-n-" n)
                       '("Save" save)
                       '("-n-" n)))
