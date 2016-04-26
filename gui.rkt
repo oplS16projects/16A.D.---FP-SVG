@@ -32,6 +32,8 @@
 ;;					 each paired with id symbol in a sublist.
 ;;	'get-tool-btns - list of tool box controls,
 ;;					 each paired with id symbol in a sublist.
+;; 'get-pen   - returns current pen (stroke) set in color/prop window
+;; 'get-brush - returns current brush (fill) set in color/prop window
 ;;
 ;;----
 ;;----
