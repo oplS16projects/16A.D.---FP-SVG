@@ -50,6 +50,14 @@
                     (list (make-element type param))))
           (writeln "add-shape: empty type")))
 
+    ;; Remove last shape from the list
+    (define (remove-last)
+      (cond ((not (null? elements-list))
+             (set! elements-list (reverse
+                                  (cdr
+                                   (reverse
+                                    elements-list)))))))
+
     ;; shortcut for number->string
     (define num->s number->string)
 
@@ -168,5 +176,6 @@
 
             ((eq? msg 'set-wh) set-wh)
             
-            ((eq? msg 'save) save-svg)))
-    dispatch))
+            ((eq? msg 'save) save-svg)
+            ((eq? msg 'remove-last) (remove-last))))
+    dispatch)) ;(define (let
