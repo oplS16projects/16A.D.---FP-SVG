@@ -95,7 +95,7 @@
                      [stretchable-height #f]))
   
   ; =========================================================
-  ;; Properties window
+  ;; Color/Properties window
 
   ;; Make current Pen/Brush color, associated procs
   (define c-pen '())
