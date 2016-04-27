@@ -80,7 +80,6 @@
                            (refresh-canvas)))
                    ((eq? current-util 'load)
                     (begin
-                      (svg 'clear)
                       [(svg 'load) (get-file)]
                       (trigger-event)
                       (refresh-canvas)))))))
