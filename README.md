@@ -51,7 +51,7 @@ If an application will be able to store and render the same SVG document without
 * More shapes added.
 
 ### Final Presentation (last week of semester)
-* Refining the code/documentation,
+* Refining the code/documentation, 
 * Expanding on / adding functionality - if time permits.
 
 ## Group Responsibilities
