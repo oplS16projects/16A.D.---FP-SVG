@@ -56,9 +56,11 @@
   
   ; Selected util
   (define current-util '())
+  
   ; Set current-util
   (define (set-util util)
     (set! current-util util))
+  
   ; Trigger canvas event
   (define (trigger-event)
     (send m-wnd-canvas
@@ -68,16 +70,13 @@
   ; Common util-box buttons callback
   (define util-callback
     (λ (obj event)
-      (begin (set! current-util 
-                   (cadr (assq obj util-buttons)))
+      (begin (set-util 
+              (cadr (assq obj util-buttons)))
              (cond ((eq? current-util 'save)
                     [(svg 'save) (put-file)])
                    ((eq? current-util 'undo)
                     (begin (svg 'remove-last)
-                           (send m-wnd-canvas
-                                 on-event
-                                 (new mouse-event%	 
-                                      [event-type 'left-down]))
+                           (trigger-event)
                            (refresh-canvas)))
                    ((eq? current-util 'load)
                     (begin
@@ -295,11 +294,11 @@
   
   ;; Tool-box buttons
   (define btn_lst (list '("Line" line) '("Ellipse" ellipse)
+                        '("Rectangle" rect) '("--n--" n)
                         '("--n--" n) '("--n--" n)
-                         '("--n--" n) '("--n--" n)
-                         '("--n--" n) '("--n--" n)
-                         '("--n--" n) '("--n--" n)
-                         '("--n--" n)))
+                        '("--n--" n) '("--n--" n)
+                        '("--n--" n) '("--n--" n)
+                        '("--n--" n)))
   
   (define tool-box-buttons (mk_buttons m-wnd-tool_pane
                                        btn_lst

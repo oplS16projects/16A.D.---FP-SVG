@@ -124,7 +124,7 @@
               (list 'fill fill)
               (list 'fill-opacity (num->s fill-op)))))
     
-    ;of type cx="50" cy="50" r="40"
+    ;Ellipse SVG type: cx cy rx ry
     (define (mk-ellipse element)
       (let ((coords (car (element 'get-param))))
         (let ((cx (car coords))
@@ -137,7 +137,7 @@
                                        (list 'ry (num->s (abs ry))))
                                  (misc-attr element))))))
 
-    ;of type x1="0" y1="0" x2="200" y2="200"
+    ;Line SVG type: x1 y1 x2 y2
     (define (mk-line element)
       (let ((coords (car (element 'get-param))))
         (let ((x1 (car coords))
@@ -148,6 +148,19 @@
                                     (list 'y1 (num->s y1))
                                     (list 'x2 (num->s x2))
                                     (list 'y2 (num->s y2)))
+                              (misc-attr element))))))
+
+    ;Rect SVG type: x y width height
+    (define (mk-rect element)
+      (let ((coords (car (element 'get-param))))
+        (let ((x (car coords))
+              (y (cadr coords))
+              (w (- (caddr coords) (car coords)))
+              (h (- (cadddr coords) (cadr coords))))
+          (list 'rect (append (list (list 'x (num->s x))
+                                    (list 'y (num->s y))
+                                    (list 'width (num->s (abs w)))
+                                    (list 'height (num->s (abs h))))
                               (misc-attr element))))))
     ;; ============================================================
     
@@ -169,7 +182,9 @@
       (map (λ(element) (cond ((eq? (element 'get-type) 'line)
                               (mk-line element))
                              ((eq? (element 'get-type) 'ellipse)
-                              (mk-ellipse element)))) elements-list))
+                              (mk-ellipse element))
+                             ((eq? (element 'get-type) 'rect)
+                              (mk-rect element)))) elements-list))
               
     ; xml-document
     (define (mk-svg-doc) (document
@@ -193,6 +208,8 @@
              '(x1 y1 x2 y2))
             (ellipse-attr
              '(cx cy rx ry))
+            (rect-attr
+             '(x y width height))
             (brush-attr
              '(fill fill-opacity))
             (pen-attr
@@ -244,8 +261,7 @@
                          element)))
                attr-lst))
         
-        ;; shape specific procs for
-        ;  internal representation
+        ;; shape specific procs for import
         (define (mk-line-in type-attr element)
           (begin
             (define coords (slst->nlst
@@ -269,7 +285,21 @@
                                (+ (cadr coords) (cadddr coords))))
             (list coords
                   (list pen brush))))
-        
+
+        (define (mk-rect-in type-attr element)
+          (begin
+            (define coords (slst->nlst
+                            (get-attr type-attr element)))
+            (define pen (mk-pen element))
+            (define brush (mk-brush element))
+            
+            (set! coords (list (car coords)
+                               (cadr coords)
+                               (+ (car coords) (caddr coords))
+                               (+ (cadr coords) (cadddr coords))))
+            (list coords
+                  (list pen brush))))
+
         ; iterate through list of elements
         (define (iter-e-lst e-lst)
           (define wrk-type '())
@@ -277,23 +307,20 @@
                  (begin
                    (set! wrk-type (caar e-lst))
                    (cond ((eq? wrk-type 'line)
-                          (set! elements-list
-                                (append elements-list
-                                        (list (make-element
-                                               wrk-type
-                                               (mk-line-in
-                                                line-attr (cadar e-lst)))))))
+                          (add-shape wrk-type
+                                     (mk-line-in
+                                      line-attr (cadar e-lst))))
                          ((eq? wrk-type 'ellipse)
-                          (set! elements-list
-                                (append elements-list
-                                        (list (make-element
-                                               wrk-type
-                                               (mk-ellipse-in
-                                                ellipse-attr (cadar e-lst))))))))
+                          (add-shape wrk-type
+                                     (mk-ellipse-in
+                                      ellipse-attr (cadar e-lst))))
+                         ((eq? wrk-type 'rect)
+                          (add-shape wrk-type
+                                     (mk-rect-in
+                                      rect-attr (cadar e-lst)))))
                    (iter-e-lst (cdr e-lst))))))
         
-        (iter-e-lst (cddr xexpr-l))
-        elements-list)) ;return elements-list
+        (iter-e-lst (cddr xexpr-l))))
     ; ===========================================================================
     
     ;; Load SVG
@@ -301,8 +328,7 @@
       (define in (open-input-file path))
       (permissive-xexprs #t)
       (define xml-body (document-element (read-xml in)))
-      (set! elements-list
-            (read-elements (xml->xexpr xml-body)))
+      (read-elements (xml->xexpr xml-body))
       (close-input-port in)
       (port-closed? in))
     ; =====================================================================
@@ -318,4 +344,4 @@
             ((eq? msg 'save) save-svg)
             ((eq? msg 'load) load-svg)
             ((eq? msg 'remove-last) (remove-last))))
-    dispatch)) ;(define (let
+    dispatch))
