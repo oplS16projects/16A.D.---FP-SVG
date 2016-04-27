@@ -194,9 +194,10 @@
     
     ; Save svg
     (define (save-svg path)
-      (define out (open-output-file path #:exists 'replace))
-      (write-xml (mk-svg-doc) out)
-      (close-output-port out))
+      (cond (path
+             (define out (open-output-file path #:exists 'replace))
+             (write-xml (mk-svg-doc) out)
+             (close-output-port out))))
        
     ; -------------------------------------------------------
     ; SVG Import Section
@@ -325,12 +326,14 @@
     
     ;; Load SVG
     (define (load-svg path)
-      (define in (open-input-file path))
-      (permissive-xexprs #t)
-      (define xml-body (document-element (read-xml in)))
-      (read-elements (xml->xexpr xml-body))
-      (close-input-port in)
-      (port-closed? in))
+      (cond (path
+             (remove-all)
+             (define in (open-input-file path))
+             (permissive-xexprs #t)
+             (define xml-body (document-element (read-xml in)))
+             (read-elements (xml->xexpr xml-body))
+             (close-input-port in)
+             (port-closed? in))))
     ; =====================================================================
     ;; Dispatch
     (define (dispatch msg)
