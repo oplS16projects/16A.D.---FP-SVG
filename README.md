@@ -63,4 +63,4 @@ Will be working on implementation of SVG document structure and it's elements, i
 Ian Roberts will be working on adding the shape components as well as implementing the event handling using respective libraries.
 <!-- Links -->
 [archdiagram]: ./archchart.png
-[sample-out]: https://cdn.rawgit.com/oplS16projects/SkraM---FP-SVG/master/test.svg
+[sample-out]: https://cdn.rawgit.com/oplS16projects/SkraM---FP-SVG/master/test1.svg
