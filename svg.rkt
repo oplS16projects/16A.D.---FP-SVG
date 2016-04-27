@@ -1,5 +1,6 @@
 #lang racket
 (require xml)
+(require racket/gui)
 
 ;;; Module to store list of elements placed on canvas,
 ;;; and for export/import of SVG documents. Used in "main.rkt".
@@ -13,6 +14,7 @@
 ;;      'set-wh - set width/height property of SVG document
 ;;
 ;;      'save - export SVG document
+;;      'load - import SVG document
 
 
 ;;processing insruction
@@ -58,12 +60,23 @@
                                    (reverse
                                     elements-list)))))))
 
+    ;;;; Helper functions =======
+    
+    ;; string->number shortcut
+    (define str->n string->number)
+    
     ;; shortcut for number->string
     (define num->s number->string)
-
-    ;;shortcut for string-append
+    
+    ;; string-append shortcut
     (define str-ap string-append)
 
+    ;; convert list of string to
+    ;; list of numbers
+    (define (slst->nlst slst)
+      (map (λ(x)(str->n x)) slst))
+    ;;;; ========================
+    
     ;; Make rgb(R, G, B) string
     (define (rgb-string color)
       (str-ap
@@ -153,7 +166,7 @@
                              ((eq? (element 'get-type) 'ellipse)
                               (mk-ellipse element)))) elements-list))
               
-       ; xml-document
+    ; xml-document
     (define (mk-svg-doc) (document
                           svg-prolog ;doc prolog
                           (xexpr->xml (mk-svg-body (mk-body-elements))) ;doc body. xexpr to xml.
@@ -165,9 +178,128 @@
       (write-xml (mk-svg-doc) out)
       (close-output-port out))
        
+    ; -------------------------------------------------------
+    ; SVG Import Section
 
+    ; Parse xexpr and return list of elements
+    (define (read-elements xexpr-l)
+      (let ((elements-list '())
+            (line-attr
+             '(x1 y1 x2 y2))
+            (ellipse-attr
+             '(cx cy rx ry))
+            (brush-attr
+             '(fill fill-opacity))
+            (pen-attr
+             '(stroke
+               stroke-opacity
+               stroke-width)))
+        
+        (define (mk-color rgb-str opacity)
+          (let ((color-lst (string-split
+                            (string-replace
+                             (string-replace
+                              (string-replace
+                               rgb-str "rgb(" "")
+                              ")" "")
+                             "," " "))))
+            (begin
+              (set! color-lst (append
+                               (map (λ(x)(str->n x))
+                                    color-lst)
+                               (list (str->n opacity))))
+              (make-object
+                  color%
+                (car color-lst) ;r
+                (cadr color-lst) ;g
+                (caddr color-lst) ;b
+                (cadddr color-lst))))) ;alpha
+        
+        (define (mk-pen element)
+          (let ((f-pen-attr (get-attr
+                             pen-attr
+                             element)))
+            (new pen%
+                 [color (mk-color (car f-pen-attr)
+                                  (cadr f-pen-attr))]
+                 [width (str->n (caddr f-pen-attr))])))
+        
+        (define (mk-brush element)
+          (let ((f-brush-attr (get-attr
+                               brush-attr
+                               element)))
+            (new brush%
+                 [color (mk-color (car f-brush-attr)
+                                  (cadr f-brush-attr))])))
+        
+        (define (get-attr attr-lst element)
+          (map (λ (x)
+                 (cadar (filter
+                         (λ(e)(eq? (car e) x))
+                         element)))
+               attr-lst))
+        
+        ;; shape specific procs for
+        ;  internal representation
+        (define (mk-line-in type-attr element)
+          (begin
+            (define coords (slst->nlst
+                            (get-attr type-attr element)))
+            (define pen (mk-pen element))
+            (define brush (mk-brush element))
+            
+            (list coords
+                  (list pen brush))))
+        
+        (define (mk-ellipse-in type-attr element)
+          (begin
+            (define coords (slst->nlst
+                            (get-attr type-attr element)))
+            (define pen (mk-pen element))
+            (define brush (mk-brush element))
+            
+            (set! coords (list (- (car coords) (caddr coords))
+                               (- (cadr coords) (cadddr coords))
+                               (+ (car coords) (caddr coords))
+                               (+ (cadr coords) (cadddr coords))))
+            (list coords
+                  (list pen brush))))
+        
+        ; iterate through list of elements
+        (define (iter-e-lst e-lst)
+          (define wrk-type '())
+          (cond ((not (null? e-lst))
+                 (begin
+                   (set! wrk-type (caar e-lst))
+                   (cond ((eq? wrk-type 'line)
+                          (set! elements-list
+                                (append elements-list
+                                        (list (make-element
+                                               wrk-type
+                                               (mk-line-in
+                                                line-attr (cadar e-lst)))))))
+                         ((eq? wrk-type 'ellipse)
+                          (set! elements-list
+                                (append elements-list
+                                        (list (make-element
+                                               wrk-type
+                                               (mk-ellipse-in
+                                                ellipse-attr (cadar e-lst))))))))
+                   (iter-e-lst (cdr e-lst))))))
+        
+        (iter-e-lst (cddr xexpr-l))
+        elements-list)) ;return elements-list
 
-    ; -------------------------------------------------------   
+    ;; Load SVG
+    (define (load-svg path)
+      (define in (open-input-file path))
+      (permissive-xexprs #t)
+      (define xml-body (document-element (read-xml in)))
+      (set! elements-list
+            (read-elements (xml->xexpr xml-body)))
+      (close-input-port in)
+      (port-closed? in))
+    ; =====================================================================
     ;; Dispatch
     (define (dispatch msg)
       (cond ((eq? msg 'add-shape) add-shape)
@@ -177,5 +309,6 @@
             ((eq? msg 'set-wh) set-wh)
             
             ((eq? msg 'save) save-svg)
+            ((eq? msg 'load) load-svg)
             ((eq? msg 'remove-last) (remove-last))))
     dispatch)) ;(define (let
