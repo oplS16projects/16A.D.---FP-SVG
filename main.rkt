@@ -165,13 +165,13 @@
     dispatch))
 
 ; Elements constructor
-(define (element type param)
-  (let ((t type)
-        (p param))
-    (define (dispatch msg)
-      (cond ((eq? msg 'get-param) p)
-            ((eq? msg 'get-type) t)))
-    dispatch))
+;(define (element type param)
+;  (let ((t type)
+;        (p param))
+;    (define (dispatch msg)
+;      (cond ((eq? msg 'get-param) p)
+;            ((eq? msg 'get-type) t)))
+;    dispatch))
 ; ===========================================================
 
 
