@@ -25,6 +25,12 @@
     ;sqr
     (define (sqr x) (* x x))
 
+    ; Reset drawing obj
+    (define (reset)
+      (set! mouse-start-p '())
+      (set! mouse-current-p '())
+      (set! mouse-square '()))
+      
     ; Current tool selector
     (define (mk-current-tool type)
       (cond ((eq? type 'line) (list 'line
@@ -35,8 +41,8 @@
                         (λ([var #f]) 'emptylambda)))))
 
     ;Set current tool
-    (define (set-current-tool tool-pair)
-      (set! current-tool tool-pair))
+    (define (set-current-tool tool)
+      (set! current-tool tool))
       
 
     ; Make pen
@@ -160,7 +166,8 @@
             ((eq? msg 'get-tool-type) (car current-tool))
             ((eq? msg 'get-params) (mk-params))
             ((eq? msg 'drawing?) drawing?)
-            ((eq? msg 'set-drawing?) set-drawing?)))
+            ((eq? msg 'set-drawing?) set-drawing?)
+            ((eq? msg 'reset) (reset))))
             ;((eq? msg 'end) )))
     dispatch))
 
@@ -181,6 +188,11 @@
   (class canvas% 
     (define/override (on-event event)
       (begin
+        (if (eq? (main-gui
+                  'get-current-util)
+                 'load) (begin (main-draw 'reset)
+                               [(main-gui 'set-util) '()])
+                        'a)
         (main-gui 'clear-bmp)
         (draw-all-elements (main-svg 'get-e-list))
         (cond
