@@ -116,8 +116,10 @@
       (set-brush)
       ;(set-dc-brush)
       (set-mouse-current event)
-      (cond ((null? current-tool)
-             (error "current-tool not initialized"))
+      (cond ((and (null? current-tool)
+                  (not type))
+             (set-current-tool (mk-current-tool 'n)))
+             ;(error "current-tool not initialized"))
             ((not type) (cadr current-tool))
             (else  (cadr (mk-current-tool type)))))
       
