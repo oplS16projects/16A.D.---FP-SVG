@@ -56,6 +56,15 @@
   
   ; Selected util
   (define current-util '())
+  ; Set current-util
+  (define (set-util util)
+    (set! current-util util))
+  ; Trigger canvas event
+  (define (trigger-event)
+    (send m-wnd-canvas
+          on-event
+          (new mouse-event%	 
+               [event-type 'enter])))
   ; Common util-box buttons callback
   (define util-callback
     (λ (obj event)
@@ -69,7 +78,14 @@
                                  on-event
                                  (new mouse-event%	 
                                       [event-type 'left-down]))
-                           (refresh-canvas)))))))
+                           (refresh-canvas)))
+                   ((eq? current-util 'load)
+                    (begin
+                      (svg 'clear)
+                      [(svg 'load) (get-file)]
+                      (trigger-event)
+                      (refresh-canvas)))))))
+  
 
 
   ; Selected tool
@@ -302,7 +318,7 @@
 
   ;; Utility buttons
   (set! btn_lst (list '("Undo" undo)
-                      '("-n-" n)
+                      '("Load" load)
                       '("Save" save)
                       '("-n-" n)))
   (define util-buttons (mk_buttons m-wnd-util_pane
@@ -376,6 +392,7 @@
 
           ((eq? msg 'set-canvas) set-canvas)
           ((eq? msg 'set-svg) set-svg)
+          ((eq? msg 'set-util) set-util)
 
           ((eq? msg 'get-bmp-dc) bmp-dc)
           ((eq? msg 'get-current-tool) current-tool)
