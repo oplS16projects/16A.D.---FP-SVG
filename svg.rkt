@@ -13,6 +13,7 @@
 ;;
 ;;      'set-wh - set width/height property of SVG document
 ;;
+;;      'clear - remove all eleements from elements-list
 ;;      'save - export SVG document
 ;;      'load - import SVG document
 
@@ -60,7 +61,11 @@
                                    (reverse
                                     elements-list)))))))
 
-    ;;;; Helper functions =======
+    ;; Clear elements list
+    (define (remove-all)
+      (set! elements-list '()))
+
+    ;;;; Helper functions --------
     
     ;; string->number shortcut
     (define str->n string->number)
@@ -144,7 +149,7 @@
                                     (list 'x2 (num->s x2))
                                     (list 'y2 (num->s y2)))
                               (misc-attr element))))))
-    ;; ----------------------------------------------------------
+    ;; ============================================================
     
     ; svg-body
     (define (mk-svg-body body-elements)
@@ -289,7 +294,8 @@
         
         (iter-e-lst (cddr xexpr-l))
         elements-list)) ;return elements-list
-
+    ; ===========================================================================
+    
     ;; Load SVG
     (define (load-svg path)
       (define in (open-input-file path))
@@ -307,7 +313,8 @@
             ((eq? msg 'get-e-list) elements-list)
 
             ((eq? msg 'set-wh) set-wh)
-            
+
+            ((eq? msg 'clear) (remove-all))
             ((eq? msg 'save) save-svg)
             ((eq? msg 'load) load-svg)
             ((eq? msg 'remove-last) (remove-last))))
