@@ -294,11 +294,11 @@
   
   ;; Tool-box buttons
   (define btn_lst (list '("Line" line) '("Ellipse" ellipse)
+                        '("Rectangle" rect) '("--n--" n)
                         '("--n--" n) '("--n--" n)
-                         '("--n--" n) '("--n--" n)
-                         '("--n--" n) '("--n--" n)
-                         '("--n--" n) '("--n--" n)
-                         '("--n--" n)))
+                        '("--n--" n) '("--n--" n)
+                        '("--n--" n) '("--n--" n)
+                        '("--n--" n)))
   
   (define tool-box-buttons (mk_buttons m-wnd-tool_pane
                                        btn_lst
