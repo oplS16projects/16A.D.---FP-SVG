@@ -29,7 +29,8 @@
     (define (reset)
       (set! mouse-start-p '())
       (set! mouse-current-p '())
-      (set! mouse-square '()))
+      (set! mouse-square '())
+      (set-current-tool (mk-current-tool 'n)))
       
     ; Current tool selector
     (define (mk-current-tool type)
@@ -40,7 +41,7 @@
             ((eq? type 'rect) (list 'rect
                                     rect))
             (else (list 'n
-                        (λ([var #f]) 'emptylambda)))))
+                        (λ([var #f]) (not (not var)))))))
 
     ;Set current tool
     (define (set-current-tool tool-pair)
