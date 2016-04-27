@@ -37,6 +37,8 @@
                                     line))
             ((eq? type 'ellipse) (list 'ellipse
                                       ellipse))
+            ((eq? type 'rect) (list 'rect
+                                    rect))
             (else (list 'n
                         (λ([var #f]) 'emptylambda)))))
 
@@ -125,7 +127,14 @@
       
     ; -------------------------------------------------
     ;; Shape-specific procedures
-    ;Line - coords x1, y1, x2, y2
+    ;; Typical coords (params) for internal representation:
+    ;;   x1, y1, x2, y2 square.
+    ;;
+    ;;   Adjustment to/from SVG format coords
+    ;;   performed by SVG object on import/export.
+    ;;   SVG type is shown for reference only.
+    
+    ;Line. (SVG type: x1, y1, x2, y2)
     (define (line [params #f])
       (mk-mouse-square params)
       (set-dc-pen params)
@@ -136,7 +145,7 @@
               (caddr mouse-square)
               (cadddr mouse-square)))
 
-    ;Circle - coords cx, cy, r
+    ;Ellipse. (SVG type: cx, cy, rx, ry)
     (define (ellipse [params #f])
       (mk-mouse-square params)
       (set-dc-pen params)
@@ -151,6 +160,26 @@
                        (cadr mouse-square)))))
         (mk-mouse-square (list sx sy (+ sx w)  (+ sy h)))
         (send (maingui 'get-bmp-dc) draw-ellipse
+              sx
+              sy
+              w
+              h)))
+    
+    ;; Rectangle. (SVG type: x, y, w, h)
+    (define (rect [params #f])
+      (mk-mouse-square params)
+      (set-dc-pen params)
+      (set-dc-brush params)
+      (let ((sx (min (car mouse-square)
+                     (caddr mouse-square)))
+            (sy (min (cadr mouse-square)
+                     (cadddr mouse-square)))
+            (w (abs (- (caddr mouse-square)
+                       (car mouse-square))))
+            (h (abs (- (cadddr mouse-square)
+                       (cadr mouse-square)))))
+        (mk-mouse-square (list sx sy (+ sx w)  (+ sy h)))
+        (send (maingui 'get-bmp-dc) draw-rectangle
               sx
               sy
               w
