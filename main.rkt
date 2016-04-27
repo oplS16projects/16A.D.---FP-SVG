@@ -41,8 +41,8 @@
                         (λ([var #f]) 'emptylambda)))))
 
     ;Set current tool
-    (define (set-current-tool tool)
-      (set! current-tool tool))
+    (define (set-current-tool tool-pair)
+      (set! current-tool tool-pair))
       
 
     ; Make pen
