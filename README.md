@@ -9,7 +9,7 @@ Ian Roberts
 A simple drawing environment with a focus on exporting generated images to an XML-based Scalable Vector Graphics document. The editor allows to draw basic shapes, export drawing to and import drawings from SkraM-compatible SVG documents.
 
 ##Screenshot
-![skram.png][screenshot]
+![screenshot][skram.png]
 
 ##Concepts Demonstrated
 
@@ -21,8 +21,8 @@ A simple drawing environment with a focus on exporting generated images to an XM
 
 ##External Technology and Libraries
 Libraries used:
-* racket xml - for import/export of SVG documents. Imported files are read into XML "document" structure and converted to lists of elements with sublists of attributes (x-expressions). For export, constructed x-expressions are converted back to XML "document".
-*racket gui - general purpose UI elements, bitmap functionality for drawing, canvas class for rendering bitmaps.
+* **racket xml** - for import/export of SVG documents. Imported files are read into XML "document" structure and converted to lists of elements with sublists of attributes (x-expressions). For export, constructed x-expressions are converted back to XML "document".
+* **racket gui** - general purpose UI elements, bitmap functionality for drawing, canvas class for rendering bitmaps.
 
 ##Favorite Scheme Expressions
 ####Dmitri's
@@ -40,13 +40,16 @@ This procedure, an example of functional programming, maps a list of predefined 
 
 
 #How to Download and Run
-[demo][demo_release_link]
 
-#Instructions
+Latest release can be found at [https://github.com/oplS16projects/SkraM---FP-SVG/releases][release_link]
+
+Current Master branch [https://github.com/oplS16projects/SkraM---FP-SVG/archive/master.zip][master_branch]
+
+##Instructions
+
 Start application with main.rkt
 
-##Functionality:
-
+###Main SkraM Window
 Left Toolbar:
 * select shapes to draw
 
@@ -57,16 +60,17 @@ Bottom Toolbar:
 * -n-  - not implemented
 * !!Clear!! - clear the canvas entirely. Asks for confirmation.
 
-Color window:
+###Color Window
 * Ellipse is for color reference
   (doesn't represent current shape)
 	* Frame displays stroke color
 	* Area displays fill color
 
-* Set the color by choosing *stroke* or *fill* radio buttons,
+* Set the color by selecting *stroke* or *fill* radio buttons,
 	and adjusting R, G and B sliders.
 
 <!-- Links -->
 
 [skram.png]: ./Screenshot/SkraM.png
-[demo_release_link]: 
+[release_link]: https://github.com/oplS16projects/SkraM---FP-SVG/releases
+[master_branch]: https://github.com/oplS16projects/SkraM---FP-SVG/archive/master.zip
