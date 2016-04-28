@@ -65,7 +65,7 @@ Color Window
 	* Frame displays stroke color
 	* Area displays fill color
 
-* Set the color by choosing *stroke* or *fill* radio buttons,
+* Set the color by selecting *stroke* or *fill* radio buttons,
 	and adjusting R, G and B sliders.
 
 <!-- Links -->
