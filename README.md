@@ -43,10 +43,9 @@ This procedure, an example of functional programming, maps a list of predefined 
 Latest release can be found at [https://github.com/oplS16projects/SkraM---FP-SVG/releases][release_link]
 Current Master branch [https://github.com/oplS16projects/SkraM---FP-SVG/archive/master.zip][master_branch]
 
-##Instructions
 Start application with main.rkt
 
-Main Window
+##Main Window
 -
 Left Toolbar:
 * select shapes to draw
@@ -58,7 +57,7 @@ Bottom Toolbar:
 * -n-  - not implemented
 * !!Clear!! - clear the canvas entirely. Asks for confirmation.
 
-Color Window
+##Color Window
 -
 * Ellipse is for color reference
   (doesn't represent current shape)
