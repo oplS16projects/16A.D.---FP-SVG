@@ -21,8 +21,8 @@ A simple drawing environment with a focus on exporting generated images to an XM
 
 ##External Technology and Libraries
 Libraries used:
-* racket xml - for import/export of SVG documents. Imported files are read into XML "document" structure and converted to lists of elements with sublists of attributes (x-expressions). For export, constructed x-expressions are converted back to XML "document".
-*racket gui - general purpose UI elements, bitmap functionality for drawing, canvas class for rendering bitmaps.
+* **racket xml** - for import/export of SVG documents. Imported files are read into XML "document" structure and converted to lists of elements with sublists of attributes (x-expressions). For export, constructed x-expressions are converted back to XML "document".
+* **racket gui** - general purpose UI elements, bitmap functionality for drawing, canvas class for rendering bitmaps.
 
 ##Favorite Scheme Expressions
 ####Dmitri's
