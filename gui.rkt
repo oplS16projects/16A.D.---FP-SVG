@@ -82,7 +82,18 @@
                     (begin
                       [(svg 'load) (get-file)]
                       (trigger-event)
-                      (refresh-canvas)))))))
+                      (refresh-canvas)))
+                   ((eq? current-util 'clear)
+                    (let ((clear-dialog
+                           (message-box "Clear"
+                                        "Clear Canvas?"
+                                        m-wnd
+                                        (list 'ok-cancel))))
+                          (cond ((eq? clear-dialog
+                                     'ok)
+                                 (svg 'clear)
+                                 (trigger-event)
+                                 (refresh-canvas)))))))))
   
 
 
@@ -318,7 +329,8 @@
   (set! btn_lst (list '("Undo" undo)
                       '("Load" load)
                       '("Save" save)
-                      '("-n-" n)))
+                      '("-n-" n)
+                      '("!!Clear!!" clear)))
   (define util-buttons (mk_buttons m-wnd-util_pane
                                    btn_lst
                                    util-callback))
