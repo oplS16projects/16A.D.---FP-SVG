@@ -11,43 +11,62 @@ A simple drawing environment with a focus on exporting generated images to an XM
 ##Screenshot
 ![skram.png][screenshot]
 
-Here's a demonstration of how to display an image that's uploaded to this repo:
-![screenshot showing env diagram](withdraw.png)
-
 ##Concepts Demonstrated
-Identify the OPL concepts demonstrated in your project. Be brief. A simple list and example is sufficient. 
-* **Data abstraction** is used to provide access to the elements of the RSS feed.
-* The objects in the OpenGL world are represented with **recursive data structures.**
-* **Symbolic language processing techniques** are used in the parser.
+
+* **Data abstraction** is used extensively to describe appropriate shape elements when drawing, exporting to or importing from SVG document.
+* Generated shape elements are stored as **objects** for internal representation.
+* Core components organized as objects (SVG processing, GUI, drawing) intercommunicate by means of **message passing**.
+* **HOPs** are used to run through various lists. E.g. list of shape objects is mapped to generate XML content, or list of string labels and tags is mapped to generate lists of GUI controls.
+
 
 ##External Technology and Libraries
-Briefly describe the existing technology you utilized, and how you used it. Provide a link to that technology(ies).
+Libraries used:
+* racket xml - for import/export of SVG documents. Imported files are read into XML "document" structure and converted to lists of elements with sublists of attributes (x-expressions). For export, constructed x-expressions are converted back to XML "document".
+*racket gui - general purpose UI elements, bitmap functionality for drawing, canvas class for rendering bitmaps.
 
 ##Favorite Scheme Expressions
-####Mark (a team member)
-Each team member should identify a favorite expression or procedure, written by them, and explain what it does. Why is it your favorite? What OPL philosophy does it embody?
-Remember code looks something like this:
-```scheme
-(map (lambda (x) (foldr compose functions)) data)
+####Dmitri's
+```racket
+        (define (get-attr attr-lst element)
+          (map (λ (x)
+                 (cadar (filter
+                         (λ(e)(eq? (car e) x))
+                         element)))
+               attr-lst))
 ```
-####Lillian (another team member)
-This expression reads in a regular expression and elegantly matches it against a pre-existing hashmap....
-```scheme
-(let* ((expr (convert-to-regexp (read-line my-in-port)))
-             (matches (flatten
-                       (hash-map *words*
-                                 (lambda (key value)
-                                   (if (regexp-match expr key) key '()))))))
-  matches)
-```
+This procedure, an example of functional programming, maps a list of predefined attributes of type '(a b c d ...) to the attribute values of element in x-expr '((a data) (b data) (c data) (d data) ...)
 
-##Additional Remarks
-Anything else you want to say in your report. Can rename or remove this section.
+
+
 
 #How to Download and Run
-You may want to link to your latest release for easy downloading by people (such as Mark).
+[demo][demo_release_link]
 
-Include what file to run, what to do with that file, how to interact with the app when its running, etc. 
+#Instructions
+Start application with main.rkt
+
+##Functionality:
+
+Left Toolbar:
+* select shapes to draw
+
+Bottom Toolbar:
+* Undo - remove drawn shapes in reverse one by one.
+* Load - Import SkraM compatible SVG document.
+* Save - Export SVG document.
+* -n-  - not implemented
+* !!Clear!! - clear the canvas entirely. Asks for confirmation.
+
+Color window:
+* Ellipse is for color reference
+  (doesn't represent current shape)
+	* Frame displays stroke color
+	* Area displays fill color
+
+* Set the color by choosing *stroke* or *fill* radio buttons,
+	and adjusting R, G and B sliders.
 
 <!-- Links -->
+
 [skram.png]: ./Screenshot/SkraM.png
+[demo_release_link]: 
