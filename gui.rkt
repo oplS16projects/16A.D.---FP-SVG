@@ -56,7 +56,6 @@
   
   ; Selected util
   (define current-util '())
-  
   ; Set current-util
   (define (set-util util)
     (set! current-util util))
@@ -102,8 +101,11 @@
   ; Common tool-box buttons callback
   (define tool-callback
     (λ (obj event)
-      (set! current-tool 
-            (cadr (assq obj tool-box-buttons))))) ;search tool buttons list for obj, get obj's id
+      (begin (set! current-tool 
+                   (cadr (assq obj tool-box-buttons))) ;search tool buttons list for obj, get obj's id
+             (set-status (string-append
+                          status-msg
+                          (send obj get-label))))))
 
 
   ; GUI elements
@@ -115,7 +117,7 @@
                      [x 0]
                      [y 0]
                      [min-width 800]
-                     [min-height 600]
+                     [min-height 200]
                      [stretchable-width #f]	 
                      [stretchable-height #f]))
   
@@ -237,7 +239,7 @@
                                     color-callback))
 
 
-  ;; Generic make radio-box.
+  ;; General purpose make radio-box.
   ;; radio_list - (label select tag)
 ;  (define (mk-radios gui_parent radio_list callproc)
 ;    (map (λ(x) (list (new radio-box%	 
@@ -294,7 +296,7 @@
   (define m-wnd-tool_pane (new vertical-pane%
                              [parent m-wnd_pane]
                              [min-width 50]	 
-                             [min-height 600]	 
+                             [min-height 200]	 
                              [stretchable-width #f]	 
                              [stretchable-height #f]))
 
@@ -323,8 +325,21 @@
   ;; Utility pane
   ;(provide m-wnd-button_pane)
   (define m-wnd-util_pane (new horizontal-pane% [parent m-wnd]
-                               [alignment (list 'center 'center)]))
+                               [alignment (list 'left 'center)]))
 
+  ;; Status msg
+  (define status-msg "Selected: ")
+  ;; Status bar
+  (define status-bar (new message%
+                          [label status-msg]
+                          [parent m-wnd-util_pane]
+                          [min-width 250]
+                          [font (make-object font% 11 'default)]))
+  ;; Set status
+  (define (set-status msg)
+    (send status-bar set-label msg))
+
+  
   ;; Utility buttons
   (set! btn_lst (list '("Undo" undo)
                       '("Load" load)
