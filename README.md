@@ -49,7 +49,7 @@ Current Master branch [https://github.com/oplS16projects/SkraM---FP-SVG/archive/
 
 Start application with main.rkt
 
-###Main Window
+###Main SkraM Window
 Left Toolbar:
 * select shapes to draw
 
