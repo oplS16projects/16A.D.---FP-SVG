@@ -9,7 +9,7 @@ Ian Roberts
 A simple drawing environment with a focus on exporting generated images to an XML-based Scalable Vector Graphics document. The editor allows to draw basic shapes, export drawing to and import drawings from SkraM-compatible SVG documents.
 
 ##Screenshot
-![skram.png][screenshot]
+![screenshot][skram.png]
 
 ##Concepts Demonstrated
 
@@ -40,13 +40,14 @@ This procedure, an example of functional programming, maps a list of predefined 
 
 
 #How to Download and Run
-[demo][demo_release_link]
+Latest release can be found at [https://github.com/oplS16projects/SkraM---FP-SVG/releases][release_link]
+Current Master branch [https://github.com/oplS16projects/SkraM---FP-SVG/archive/master.zip][master_branch]
 
-#Instructions
+##Instructions
 Start application with main.rkt
 
-##Functionality:
-
+Main Window
+-
 Left Toolbar:
 * select shapes to draw
 
@@ -57,7 +58,8 @@ Bottom Toolbar:
 * -n-  - not implemented
 * !!Clear!! - clear the canvas entirely. Asks for confirmation.
 
-Color window:
+Color Window
+-
 * Ellipse is for color reference
   (doesn't represent current shape)
 	* Frame displays stroke color
@@ -69,4 +71,5 @@ Color window:
 <!-- Links -->
 
 [skram.png]: ./Screenshot/SkraM.png
-[demo_release_link]: 
+[release_link]: https://github.com/oplS16projects/SkraM---FP-SVG/releases
+[master_branch]: https://github.com/oplS16projects/SkraM---FP-SVG/archive/master.zip
