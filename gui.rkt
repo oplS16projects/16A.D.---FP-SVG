@@ -270,7 +270,7 @@
   (define sliders-lst (list '("R" (0 255) 0 'red-s)
                             '("G" (0 255) 0 'green-s)
                             '("B" (0 255) 0 'blue-s)
-                            '("O" (0 10) 10 'alpha-s) ))
+                            '("A" (0 10) 10 'alpha-s) ))
   ;; Generated color slider list
   ;; of (slider-obj tag) pairs
   (define color-sliders (mk-sliders p-wnd-slider_pane
