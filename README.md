@@ -34,7 +34,20 @@ Libraries used:
                          element)))
                attr-lst))
 ```
+
 This procedure, an example of functional programming, maps a list of predefined attributes of type '(a b c d ...) to the attribute values of element in x-expr '((a data) (b data) (c data) (d data) ...)
+
+####Ian's
+```racket
+(cond ((eq? current-sf-radio 0)               
+               (map (λ (x y)(send (car x) set-value  y ))
+                    color-sliders psave))        
+              ((eq? current-sf-radio 1)               
+               (map (λ (x y)(send (car x) set-value  y ))
+                    color-sliders bsave)))         
+```
+With the simple, yet effective use of map as seen above. I was able to traverse the objects RGB value while also setting them into another object used to remember the users settings.
+
 
 
 
