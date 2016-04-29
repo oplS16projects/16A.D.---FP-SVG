@@ -116,8 +116,8 @@
                      [label "SkraM-SVG"]
                      [x 0]
                      [y 0]
-                     [min-width 1000]
-                     [min-height 800]
+                     [min-width 800]
+                     [min-height 600]
                      [stretchable-width #f]	 
                      [stretchable-height #f]))
   
@@ -270,7 +270,7 @@
   (define sliders-lst (list '("R" (0 255) 0 'red-s)
                             '("G" (0 255) 0 'green-s)
                             '("B" (0 255) 0 'blue-s)
-                            '("O" (1 10) 1 'alpha-s) ))
+                            '("A" (0 10) 10 'alpha-s) ))
   ;; Generated color slider list
   ;; of (slider-obj tag) pairs
   (define color-sliders (mk-sliders p-wnd-slider_pane
@@ -335,7 +335,7 @@
   (define m-wnd-tool_pane (new vertical-pane%
                                [parent m-wnd_pane]
                                [min-width 50]	 
-                               [min-height 800]	 
+                               [min-height 600]	 
                                [stretchable-width #f]	 
                                [stretchable-height #f]))
   
@@ -368,7 +368,7 @@
   (define status-bar (new message%
                           [label status-msg]
                           [parent m-wnd-util_pane]
-                          [min-width 325]
+                          [min-width 250]
                           [font (make-object font% 11 'default)]))
   ;; Set status
   (define (set-status msg)
