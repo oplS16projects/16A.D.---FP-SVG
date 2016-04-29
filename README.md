@@ -69,6 +69,8 @@ Bottom Toolbar:
 * Set the color by selecting *stroke* or *fill* radio buttons,
 	and adjusting R, G and B sliders.
 
+* Set stroke and/or fill opacity (alpha) by adjusting slider "A".
+
 <!-- Links -->
 
 [skram.png]: ./Screenshot/SkraM.png
